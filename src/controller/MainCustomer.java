@@ -17,14 +17,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainCustomer implements Initializable {
-    public TableView customerTable;
-    public TableColumn customerIdColumn;
-    public TableColumn nameColumn;
-    public TableColumn streetColumn;
-    public TableColumn cityStateColumn;
-    public TableColumn countryColumn;
-    public TableColumn zipColumn;
-    public TableColumn phoneColumn;
+    public TableView<Customer> customerTable;
+    public TableColumn<Customer, Integer> customerIdColumn;
+    public TableColumn<Customer, String> nameColumn;
+    public TableColumn<Customer, String> streetColumn;
+    public TableColumn<Customer, String> cityStateColumn;
+    public TableColumn<Customer, String> countryColumn;
+    public TableColumn<Customer, String> zipColumn;
+    public TableColumn<Customer, String> phoneColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

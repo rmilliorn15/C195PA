@@ -8,8 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.loginToDB;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.*;
 
 import java.net.URL;
@@ -32,8 +34,8 @@ public class LoginScreenController implements Initializable {
      * sets the users Locale
      * commented line is for testing setting to French.
      */
-    private Locale userLocale = Locale.getDefault();
-   // private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
+   private Locale userLocale = Locale.getDefault();
+  //  private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
 
     /**
      * sets userZone ID
@@ -48,14 +50,16 @@ public class LoginScreenController implements Initializable {
      * @param actionEvent exit button clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
+
         if (userLocale.getCountry().equals("FR")) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Êtes-vous sûr de vouloir quitter?");
             confirm.setHeaderText("Cliquez sur OK pour quitter");
             Optional<ButtonType> result = confirm.showAndWait();
-            ;
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                JDBC.closeConnection();
                 System.exit(0);
+
             }
         }
         else {
@@ -64,6 +68,7 @@ public class LoginScreenController implements Initializable {
         confirm.setHeaderText("Click Ok to exit");
             Optional<ButtonType> result = confirm.showAndWait();;
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                JDBC.closeConnection();
                 System.exit(0);
         }
 
@@ -77,7 +82,10 @@ public class LoginScreenController implements Initializable {
      * compares to authorized users and allows login or denies login attempt.
      * @param actionEvent login button was clicked.
      */
-    public void loginBtnAction(ActionEvent actionEvent) throws IOException {
+    public void loginBtnAction(ActionEvent actionEvent) throws IOException, SQLException {
+        String userName = userNameField.getText();//gets input username
+        String password = passwordField.getText();//gets input password
+        loginSuccessful = loginToDB.loggedIn(userName,password);
 
         if(loginSuccessful) {
             Parent root = FXMLLoader.load(getClass().getResource("/view/mainCustomer.fxml"));
@@ -85,11 +93,10 @@ public class LoginScreenController implements Initializable {
             stage.setTitle("Customers");
             stage.setScene(new Scene(root));
             stage.show();
-
-            JDBC.openConnection();
         }
         else {
-
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
+            alert.showAndWait();
         }
 
 
@@ -117,7 +124,7 @@ public class LoginScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (userLocale.getCountry().equals("FR")) {
+        if (userLocale.getLanguage().equals("fr")) {
             setTextLanguage();
         }
         userLocationLabel.setText(String.valueOf(userZoneID));

@@ -1,13 +1,18 @@
 package main;
 
 import helper.JDBC;
+import helper.fruitsQuery;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.*;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
 
@@ -23,19 +28,21 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException {
 
         JDBC.openConnection();
-        JDBC.closeConnection();
+      //  Locale france = Locale.FRENCH;
+       // Locale.setDefault(france);
 
+      //  ResourceBundle rb = ResourceBundle.getBundle("helper/french_fr", Locale.getDefault());
+       // if (Locale.getDefault().getLanguage().equals("fr"))
+         //   System.out.println(rb.getString("userNameLabel"));
+          //  System.out.println(rb.getString("passwordLabel"));
 
-
-
-        LocalDate nowDate = LocalDate.now();
-        LocalTime nowTime = LocalTime.now();
-        LocalDateTime nowDateTime = LocalDateTime.of(nowDate, nowTime);
-        System.out.println("It's currently " + nowDateTime + " where I am");
 
         launch(args);
+
+
+        JDBC.closeConnection();
     }
 }

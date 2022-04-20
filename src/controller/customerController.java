@@ -6,10 +6,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
+import model.CustomerDB;
+import model.User;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 
 public class customerController implements Initializable {
@@ -29,35 +32,39 @@ public class customerController implements Initializable {
     public TextField customerIDBox;
     public ComboBox customerCityState;
 
-    private static int customerID = 1;
 
 
 
     public void saveBtnAction(ActionEvent actionEvent) {
         try {
-            int id = customerID;
+            int id;
             String name;
             String address;
             String zipCode;
             String country;
             String phoneNumber;
-            String customerDivision;
+           int customerDivision;
+           Timestamp currentTime = new Timestamp(2012,12,12,12,12,12,12) ;
 
             name = customerName.getText();
             address= customerStreet.getText();
             zipCode = customerZip.getText();
             phoneNumber = customerPhone.getText();
-            country = (String) customerCountry.getSelectionModel().getSelectedItem();
-            customerDivision = (String) customerCityState.getSelectionModel().getSelectedItem();
-
-            Customer newCustomer = new Customer(id, name,address,zipCode,country,phoneNumber,customerDivision);
-
+            customerDivision = 3;
+            String user = User.getUserName();
+            CustomerDB.insert(name,address,zipCode,phoneNumber,currentTime,user,currentTime,user,customerDivision);
 
 
-            Customer.addCustomers(newCustomer);
-            customerID++;
-        }catch (NumberFormatException e){}
 
+
+
+
+
+        }catch (NumberFormatException e){
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void clearBtnAction(ActionEvent actionEvent) {
@@ -69,7 +76,7 @@ public class customerController implements Initializable {
     public void updateBtnAction(ActionEvent actionEvent) {
 
 
-        customerID++;
+
     }
 
     public void deleteBtnAction(ActionEvent actionEvent) {
@@ -79,7 +86,7 @@ public class customerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        customerIDBox.setText(String.valueOf(customerID));
+
 
 
     }

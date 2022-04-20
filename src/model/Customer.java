@@ -4,6 +4,8 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Timestamp;
+
 public class Customer {
 
     private int id;
@@ -12,9 +14,16 @@ public class Customer {
     private String zipCode;
     private String country;
     private String phoneNumber;
-    private String customerDivision;
+    private int customerDivision;
 
-    private static ObservableList<Customer> customers = FXCollections.observableArrayList();
+    private Timestamp created;
+
+    private String createdBy;
+    private Timestamp lastUpdate;
+    private String updatedBy;
+
+
+    private static ObservableList<Customer> customers = CustomerDB.getAllCustomers();
 
 
     /**
@@ -23,19 +32,22 @@ public class Customer {
      * @param name Customer Name
      * @param address Customer Address
      * @param zipCode Customer Zip
-     * @param country Customer country
      * @param phoneNumber Customer Phone number
      * @param customerDivision Customer first level division.(state/provinces)
      */
-    public Customer(int id, String name, String address, String zipCode, String country,
-                    String phoneNumber, String customerDivision){
+    public Customer(int id, String name, String address, String zipCode,
+                    String phoneNumber, Timestamp created, String createdBy,Timestamp lastUpdate, String updatedBy, int customerDivision){
         this.id = id;
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
-        this.country = country;
         this.phoneNumber = phoneNumber;
+        this.created = created;
+        this.createdBy=createdBy;
+        this.lastUpdate=lastUpdate;
+        this.updatedBy=updatedBy;
         this.customerDivision = customerDivision;
+
     }
 
     /**
@@ -74,7 +86,7 @@ public class Customer {
      * getter for first level division
       * @return customer division
      */
-    public String getCustomerDivision() {
+    public int getCustomerDivision() {
         return customerDivision;
     }
 
@@ -114,7 +126,7 @@ public class Customer {
      * setter for customer division.
       * @param customerDivision
      */
-    public void setCustomerDivision(String customerDivision) {
+    public void setCustomerDivision(int customerDivision) {
         this.customerDivision = customerDivision;
     }
 
@@ -169,6 +181,7 @@ public class Customer {
     /**
      * shows list of all customers in system currently
      * @return customer list array
+     *
      */
     public static ObservableList<Customer> getAllCustomers(){
         return customers;
