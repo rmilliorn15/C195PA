@@ -4,6 +4,7 @@ import helper.JDBC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -89,7 +90,7 @@ public class LoginScreenController implements Initializable {
 
         if(loginSuccessful) {
             Parent root = FXMLLoader.load(getClass().getResource("/view/mainCustomer.fxml"));
-            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("Customers");
             stage.setScene(new Scene(root));
             stage.show();

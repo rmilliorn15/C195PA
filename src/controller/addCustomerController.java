@@ -1,21 +1,23 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import model.Customer;
-import model.CustomerDB;
-import model.User;
+import model.*;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
-public class customerController implements Initializable {
+public class addCustomerController implements Initializable {
     public TableView<Customer> customerTable;
     public TableColumn<Customer, Integer> customerIdcolumn;
     public TableColumn<Customer, String> nameColumn;
@@ -37,15 +39,14 @@ public class customerController implements Initializable {
 
     public void saveBtnAction(ActionEvent actionEvent) {
         try {
-            int id;
             String name;
             String address;
             String zipCode;
-            String country;
             String phoneNumber;
-           int customerDivision;
-           Timestamp currentTime = new Timestamp(2012,12,12,12,12,12,12) ;
-
+            int customerDivision;
+            LocalDate nowDate = LocalDate.now();
+            LocalTime nowtime = LocalTime.now();
+            LocalDateTime currentTime = LocalDateTime.of(nowDate,nowtime);
             name = customerName.getText();
             address= customerStreet.getText();
             zipCode = customerZip.getText();
@@ -53,11 +54,6 @@ public class customerController implements Initializable {
             customerDivision = 3;
             String user = User.getUserName();
             CustomerDB.insert(name,address,zipCode,phoneNumber,currentTime,user,currentTime,user,customerDivision);
-
-
-
-
-
 
 
         }catch (NumberFormatException e){
@@ -68,6 +64,12 @@ public class customerController implements Initializable {
     }
 
     public void clearBtnAction(ActionEvent actionEvent) {
+        customerName.setText("");
+        customerStreet.setText("");
+        customerCityState.setValue(1);
+        customerPhone.setText("");
+        customerZip.setText("");
+
     }
 
     public void cancelBtnAction(ActionEvent actionEvent) {
@@ -80,13 +82,16 @@ public class customerController implements Initializable {
     }
 
     public void deleteBtnAction(ActionEvent actionEvent) {
-       Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
-       Customer.removeCustomer(selectedCustomer);
+        Customer selectedCustomer = customerTable.getSelectionModel().getSelectedItem();
+        Customer.removeCustomer(selectedCustomer);
     }
+
+
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
 
 
     }

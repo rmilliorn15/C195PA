@@ -1,10 +1,9 @@
 package model;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 
 public class Customer {
 
@@ -16,10 +15,10 @@ public class Customer {
     private String phoneNumber;
     private int customerDivision;
 
-    private Timestamp created;
+    private LocalDateTime created;
 
     private String createdBy;
-    private Timestamp lastUpdate;
+    private LocalDateTime lastUpdate;
     private String updatedBy;
 
 
@@ -36,15 +35,13 @@ public class Customer {
      * @param customerDivision Customer first level division.(state/provinces)
      */
     public Customer(int id, String name, String address, String zipCode,
-                    String phoneNumber, Timestamp created, String createdBy,Timestamp lastUpdate, String updatedBy, int customerDivision){
+                    String phoneNumber, String createdBy, String updatedBy, int customerDivision){
         this.id = id;
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
-        this.created = created;
         this.createdBy=createdBy;
-        this.lastUpdate=lastUpdate;
         this.updatedBy=updatedBy;
         this.customerDivision = customerDivision;
 
