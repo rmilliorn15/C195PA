@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class CustomerDB {
 
@@ -18,12 +17,22 @@ public class CustomerDB {
     /**
      * imports list of customers from DB and stores in array list
      *
+     * join is so that division name and country name populate instead of numbers.
+     *
+     * RUNTIME ERROR
+     * could not get country to populate on customer table. found out i did not have getter in the customer class to access the data.
+     *
      * @return array list of customers
      */
     public static ObservableList<Customer> getAllCustomers() {
         ObservableList<Customer> customerList = FXCollections.observableArrayList();
+
+
         try {
-            String sql = "SELECT * FROM CUSTOMERS";
+            String sql = "SELECT cust.Customer_ID, cust.Customer_Name, cust.Address, cust.Postal_Code, cust.Phone, " +
+                    " cust.Division_ID, fld.Division, fld.COUNTRY_ID, ctry.Country FROM customers as cust JOIN first_level_divisions " +
+                    "as fld on cust.Division_ID = fld.Division_ID JOIN countries as ctry ON fld.COUNTRY_ID = ctry.Country_ID";
+           // String sql = "SELECT * FROM CUSTOMERS";
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
             ResultSet resultSet = ps.executeQuery();
@@ -32,15 +41,15 @@ public class CustomerDB {
                 String customerName = resultSet.getString("Customer_Name");
                 String address = resultSet.getString("Address");
                 String zipCode = resultSet.getString("Postal_Code");
-                String createdBy = resultSet.getString("Created_By");
-                String lastUpdatedBy = resultSet.getString("Last_Updated_By");
-                String phoneNumber = resultSet.getString("Phone");
+                String division = resultSet.getString("Division");
                 int divisionID = resultSet.getInt("Division_ID");
+                String phoneNumber = resultSet.getString("Phone");
+                String customerCountry = resultSet.getString("Country");
 
-                Customer customer = new Customer(customerID, customerName, address, zipCode, phoneNumber, createdBy, lastUpdatedBy, divisionID);
+
+                Customer customer = new Customer(customerID, customerName, address, zipCode, phoneNumber, division, divisionID, customerCountry);
                 customerList.add(customer);
             }
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -49,23 +58,22 @@ public class CustomerDB {
 
     /**
      * creates new customer on the database.
-     *
+     * Made Void since it doesnt need to return anything except for when checking.
+     * <p>
      * FOR THE ADD COMMAND
      *
-     *
-      * @param customerName input customer name
-     * @param address input address
-     * @param zipCode input zip
-     * @param phoneNumber input phone number
-     * @param createdDate auto crated timestamp when created.
-     * @param createdBy user who created the record. auto created when login
-     * @param lastUpdate last change made auto gen timestamp
+     * @param customerName  input customer name
+     * @param address       input address
+     * @param zipCode       input zip
+     * @param phoneNumber   input phone number
+     * @param createdDate   auto crated timestamp when created.
+     * @param createdBy     user who created the record. auto created when login
+     * @param lastUpdate    last change made auto gen timestamp
      * @param lastUpdatedBy user auto gen when login
-     * @param divisionID selected division from combo box
-     * @return returns number of rows affected once the change is complete
-     * @throws SQLException
+     * @param divisionID    selected division from combo box
+     * @throws SQLException .
      */
-    public static int insert(String customerName,String address,String zipCode, String phoneNumber,LocalDateTime createdDate,String createdBy, LocalDateTime lastUpdate,String lastUpdatedBy,int divisionID ) throws SQLException {
+    public static void insert(String customerName, String address, String zipCode, String phoneNumber, LocalDateTime createdDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID ) throws SQLException {
         String sql = "INSERT INTO CUSTOMERS (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By,Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ? ,? ,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, customerName);
@@ -78,8 +86,41 @@ public class CustomerDB {
         ps.setString(8,lastUpdatedBy);
         ps.setInt(9,divisionID);
 
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected;
+        ps.executeUpdate();
+    }
+
+    /**
+     * cannot be primative type.
+     * returns list of customer ID numbers.
+     * @return list of customer ID.
+     */
+    public static ObservableList<Integer> getCustomerID() throws SQLException {
+        ObservableList<Integer> customerId=FXCollections.observableArrayList();
+        String sql = "SELECT DISTINCT Customer_ID FROM CUSTOMERS";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            customerId.add(resultSet.getInt("Customer_ID"));
+        }
+
+
+        return customerId;
+    }
+
+
+    /**
+     * deletes customer from dababase by selected ID number.
+     * @param customerID selected from table on main screen.
+     * @throws SQLException
+     */
+    public static void deleteSelectedCustomer(int customerID) throws SQLException {
+        String sql = "DELETE FROM CUSTOMERS WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerID);
+        ps.executeUpdate();
     }
 }
+
+
 

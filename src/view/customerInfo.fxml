@@ -21,7 +21,7 @@
       <TextField fx:id="customerName" layoutX="87.0" layoutY="61.0" />
       <TextField fx:id="customerPhone" layoutX="87.0" layoutY="97.0" />
       <TextField fx:id="customerStreet" layoutX="86.0" layoutY="134.0" />
-      <ComboBox fx:id="customerCountry" layoutX="86.0" layoutY="175.0" prefWidth="150.0" />
+      <ComboBox fx:id="customerCountry" layoutX="86.0" layoutY="175.0" onAction="#countrySelect" prefWidth="150.0" />
       <TextField fx:id="customerZip" layoutX="86.0" layoutY="256.0" />
       <Label layoutX="26.0" layoutY="65.0" text="Name">
          <opaqueInsets>
@@ -42,7 +42,7 @@
          </opaqueInsets>
       </Label>
       <Label layoutX="9.0" layoutY="303.0" text="Customer ID" />
-      <TextField fx:id="customerIDBox" disable="true" editable="false" layoutX="86.0" layoutY="299.0" />
+      <TextField fx:id="customerId" disable="true" editable="false" layoutX="86.0" layoutY="299.0" />
       <ComboBox fx:id="customerCityState" layoutX="87.0" layoutY="216.0" prefWidth="150.0" />
       <ButtonBar layoutX="26.0" layoutY="528.0" prefHeight="40.0" prefWidth="162.0">
         <buttons>
@@ -62,7 +62,5 @@
           <TableColumn fx:id="phoneColumn" prefWidth="75.0" text="Phone#" />
         </columns>
       </TableView>
-      <Button layoutX="315.0" layoutY="536.0" mnemonicParsing="false" onAction="#updateBtnAction" text="Update" />
-      <Button layoutX="503.0" layoutY="536.0" mnemonicParsing="false" onAction="#deleteBtnAction" text="Delete" />
    </children>
 </AnchorPane>

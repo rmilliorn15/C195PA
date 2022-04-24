@@ -17,6 +17,7 @@ import model.CustomerDB;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MainCustomer implements Initializable {
@@ -37,10 +38,9 @@ public class MainCustomer implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         streetColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         cityStateColumn.setCellValueFactory(new PropertyValueFactory<>("customerDivision"));
-        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         zipColumn.setCellValueFactory(new PropertyValueFactory<>("zipCode"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
     }
 
     public void addBtnAction(ActionEvent actionEvent) throws IOException {
@@ -52,13 +52,31 @@ public class MainCustomer implements Initializable {
     }
 
     public void updateBtnAction(ActionEvent actionEvent) {
+        customerTable.getSelectionModel().getSelectedItem();
+
     }
 
-    public void deleteBtnAction(ActionEvent actionEvent) {
+    /**
+     * deletes customer from Database and from the customer list array.
+     * @param actionEvent
+     * @throws SQLException
+     */
+    public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
+        Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if(deleteCustomer == null) {
+            System.out.println("Create alert for select cust to delete.");
+        } else {
+            int deleteCustomerId = deleteCustomer.getId();
+            CustomerDB.deleteSelectedCustomer(deleteCustomerId);
+            Customer.removeCustomer(deleteCustomer);
+        }
     }
 
     public void exitBtnAction(ActionEvent actionEvent) {
+        System.out.println("work on update button main customer screen next. Then appointments");
         System.exit(0);
+
+
     }
 
     public void searchCustomer(ActionEvent actionEvent) {

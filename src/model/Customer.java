@@ -13,19 +13,22 @@ public class Customer {
     private String zipCode;
     private String country;
     private String phoneNumber;
-    private int customerDivision;
+    private String customerDivision;
 
     private LocalDateTime created;
 
     private String createdBy;
     private LocalDateTime lastUpdate;
     private String updatedBy;
+    private int divisionID;
+    private String customerCountry;
 
 
     private static ObservableList<Customer> customers = CustomerDB.getAllCustomers();
 
 
     /**
+     *
      * constructor for customer object.
      * @param id customer Id
      * @param name Customer Name
@@ -33,17 +36,18 @@ public class Customer {
      * @param zipCode Customer Zip
      * @param phoneNumber Customer Phone number
      * @param customerDivision Customer first level division.(state/provinces)
+     * @param customerCountry country from selection box
      */
     public Customer(int id, String name, String address, String zipCode,
-                    String phoneNumber, String createdBy, String updatedBy, int customerDivision){
+                    String phoneNumber, String customerDivision, int divisionID, String customerCountry){
         this.id = id;
         this.name = name;
         this.address = address;
         this.zipCode = zipCode;
         this.phoneNumber = phoneNumber;
-        this.createdBy=createdBy;
-        this.updatedBy=updatedBy;
+        this.divisionID = divisionID;
         this.customerDivision = customerDivision;
+        this.customerCountry = customerCountry;
 
     }
 
@@ -83,7 +87,7 @@ public class Customer {
      * getter for first level division
       * @return customer division
      */
-    public int getCustomerDivision() {
+    public String getCustomerDivision() {
         return customerDivision;
     }
 
@@ -96,8 +100,8 @@ public class Customer {
     }
 
     /**
-     * getter for customer country
-     * @return customer country
+     * getter for customer zip/Postal code
+     * @return customer postal code
      */
     public String getZipCode() {
         return zipCode;
@@ -112,6 +116,15 @@ public class Customer {
     }
 
     /**
+     * getter for country
+     * @return customer country
+     *
+     */
+    public String getCustomerCountry() {
+        return customerCountry;
+    }
+
+    /**
      * setter for customer address
      * @param address
      */
@@ -123,7 +136,7 @@ public class Customer {
      * setter for customer division.
       * @param customerDivision
      */
-    public void setCustomerDivision(int customerDivision) {
+    public void setCustomerDivision(String customerDivision) {
         this.customerDivision = customerDivision;
     }
 
@@ -157,6 +170,38 @@ public class Customer {
      */
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    /**
+     * setter for division ID
+     * @param divisionID
+     */
+    public void setDivisionID(int divisionID) {
+        this.divisionID = divisionID;
+    }
+
+    /**
+     * getter for division
+     * @return division ID
+     */
+    public int getDivisionID() {
+        return divisionID;
+    }
+
+    /**
+     * setter for cust country.
+     * @param customerCountry
+     */
+    public void setCustomercountry(String customerCountry) {
+        this.customerCountry = customerCountry;
+    }
+
+    /**
+     * getter for country
+      * @return customer country.
+     */
+    public String getCustomercountry() {
+        return customerCountry;
     }
 
     /**

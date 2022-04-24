@@ -39,8 +39,7 @@ public class loginToDB {
             return true;
         }
         else {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
-           // sql.
+            new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
             return false;
         }
     }

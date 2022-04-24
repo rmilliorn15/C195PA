@@ -35,15 +35,15 @@ public class LoginScreenController implements Initializable {
      * sets the users Locale
      * commented line is for testing setting to French.
      */
-   private Locale userLocale = Locale.getDefault();
-  //  private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
+    private Locale userLocale = Locale.getDefault();
+    //  private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
 
     /**
      * sets userZone ID
      * commented line is for testing
      */
-   private ZoneId userZoneID = ZoneId.systemDefault();
-   // private ZoneId userZoneID = ZoneId.of("GMT-1");
+    private ZoneId userZoneID = ZoneId.systemDefault();
+
 
 
     /**
@@ -64,17 +64,15 @@ public class LoginScreenController implements Initializable {
             }
         }
         else {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Are you sure you want to exit?");
-        confirm.setHeaderText("Click Ok to exit");
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Are you sure you want to exit?");
+            confirm.setHeaderText("Click Ok to exit");
             Optional<ButtonType> result = confirm.showAndWait();;
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 JDBC.closeConnection();
                 System.exit(0);
+            }
         }
-
-        }
-
     }
 
     /**
