@@ -32,7 +32,7 @@ public class CustomerDB {
             String sql = "SELECT cust.Customer_ID, cust.Customer_Name, cust.Address, cust.Postal_Code, cust.Phone, " +
                     " cust.Division_ID, fld.Division, fld.COUNTRY_ID, ctry.Country FROM customers as cust JOIN first_level_divisions " +
                     "as fld on cust.Division_ID = fld.Division_ID JOIN countries as ctry ON fld.COUNTRY_ID = ctry.Country_ID";
-           // String sql = "SELECT * FROM CUSTOMERS";
+            // String sql = "SELECT * FROM CUSTOMERS";
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
             ResultSet resultSet = ps.executeQuery();
@@ -73,7 +73,8 @@ public class CustomerDB {
      * @param divisionID    selected division from combo box
      * @throws SQLException .
      */
-    public static void insert(String customerName, String address, String zipCode, String phoneNumber, LocalDateTime createdDate, String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID ) throws SQLException {
+    public static void insert(String customerName, String address, String zipCode, String phoneNumber, LocalDateTime createdDate,
+                              String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID ) throws SQLException {
         String sql = "INSERT INTO CUSTOMERS (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By,Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ? ,? ,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, customerName);
@@ -118,6 +119,35 @@ public class CustomerDB {
         String sql = "DELETE FROM CUSTOMERS WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, customerID);
+        ps.executeUpdate();
+    }
+
+    /**
+     * gets selected customer and updates their info on Database
+     * RUNTIME ERROR
+     * Forgot to add the ps.executeUpdate and couldnt figure out why it wouldnt update.
+     * Also needs to have each item with = ? not at the end like with insert.
+     * @param customerName name
+     * @param address address
+     * @param zipCode zip/postal code
+     * @param phoneNumber phone number
+     * @param lastUpdate timestamo of update
+     * @param lastUpdatedBy user who updated lase
+     * @param divisionID division id number
+     * @param customerId customer id to be changed.
+     * @throws SQLException .
+     */
+    public static void updateCustomer( int customerId, String customerName, String address, String zipCode, String phoneNumber,LocalDateTime lastUpdate, String lastUpdatedBy, int divisionID) throws SQLException {
+        String sql = "UPDATE CUSTOMERS SET Customer_Name = ?, Address = ?, Postal_Code = ? ,Phone = ?,Last_Update = ?, Last_Updated_By = ?,Division_ID = ? WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, customerName);
+        ps.setString(2, address);
+        ps.setString(3,zipCode);
+        ps.setString(4,phoneNumber);
+        ps.setTimestamp(5,Timestamp.valueOf(lastUpdate) );
+        ps.setString(6,lastUpdatedBy);
+        ps.setInt(7,divisionID);
+        ps.setInt(8,customerId);
         ps.executeUpdate();
     }
 }

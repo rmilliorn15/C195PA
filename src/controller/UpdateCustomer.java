@@ -21,31 +21,25 @@ import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class addCustomerController implements Initializable {
-    public TableView<Customer> customerTable;
-    public TableColumn<Customer, Integer> customerIdcolumn;
-    public TableColumn<Customer, String> nameColumn;
-    public TableColumn<Customer, String> streetColumn;
-    public TableColumn<Customer, String> cityStateColumn;
-    public TableColumn<Customer, String> countryColumn;
-    public TableColumn<Customer, String> zipColumn;
-    public TableColumn<Customer, String> phoneColumn;
+public class UpdateCustomer implements Initializable {
+
+
+    public TextField customerId;
+    public ComboBox<String> customerCityState;
     public TextField customerName;
     public TextField customerPhone;
     public TextField customerStreet;
     public ComboBox<String> customerCountry;
     public TextField customerZip;
-    public ComboBox<String> customerCityState;
-    public TextField customerId;
 
+    int Index;
 
     /**
-     * gets textfields and adds new customer to database.
-     * then returns to main screen.
+     * updates customer information and sends to database and main customer screen.
+     * If succeccful returns to main screen.
      * @param actionEvent save button clicked.
      */
     public void saveBtnAction(ActionEvent actionEvent) {
-
         try {
             boolean custAdded = false;
             int id;
@@ -57,16 +51,17 @@ public class addCustomerController implements Initializable {
             LocalDate nowDate = LocalDate.now();
             LocalTime nowtime = LocalTime.now();
             LocalDateTime currentTime = LocalDateTime.of(nowDate,nowtime);
+            String user = User.getUserName();
 
             // gets values and inserts to DB
-            id = CustomerDB.getCustomerID().size() + 1;
+            id = CustomerDB.getCustomerID().size();
             name = customerName.getText();
             address= customerStreet.getText();
             zipCode = customerZip.getText();
             phoneNumber = customerPhone.getText();
             customerDivision = firstLevelDivisionDB.getDivisionId(customerCityState.getValue());
 
-            String user = User.getUserName();
+
             if (name.isBlank()){
                 alertSwitch(1);
             } else if (address.isBlank()) {
@@ -79,12 +74,12 @@ public class addCustomerController implements Initializable {
                 alertSwitch(5);
             } else {
                 Customer newCustomer = new Customer(id, name, address, zipCode, phoneNumber,customerCityState.getValue(),customerDivision,customerCountry.getValue());
-                CustomerDB.insert(name, address, zipCode, phoneNumber, currentTime, user, currentTime, user, customerDivision);
+
+                CustomerDB.updateCustomer( id, name, address, zipCode, phoneNumber,currentTime, user , customerDivision);
+                Customer.updateCustomer(Index,newCustomer);
 
                 // FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 System.out.println("ask about the id auto increment matching DB when talk to CI or LIS.");
-                Customer.addCustomers(newCustomer);
-
                 custAdded = true;
 
             }
@@ -107,7 +102,7 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * clears input information from text boxes.
+     * removes text from input boxes.
      * @param actionEvent clear button clicked.
      */
     public void clearBtnAction(ActionEvent actionEvent) {
@@ -116,11 +111,10 @@ public class addCustomerController implements Initializable {
         customerCityState.getItems().clear();
         customerPhone.setText("");
         customerZip.setText("");
-
     }
 
     /**
-     * discards changes and returns to main screen.
+     * cancels changes and returns to the main customer screen.
      * @param actionEvent cancel button clicked.
      * @throws IOException .
      */
@@ -139,22 +133,32 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * when country is selected enables state/province selector and populates with info from Database.
-     * @param actionEvent country selected from combo box.
+     * Used to get selected customer from main screen and send to the update page.
+     * @param send selected customer from main customer table
      */
-    public void countrySelect(ActionEvent actionEvent) {
-
-        customerCityState.setDisable(false);
-        try {
-            customerCityState.setItems(firstLevelDivisionDB.getDivision(customerCountry.getValue()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void sendCustomer(Customer send) throws SQLException {
+        customerId.setText(String.valueOf(send.getId()));
+        customerName.setText(send.getName());
+        customerPhone.setText(send.getPhoneNumber());
+        customerStreet.setText(send.getAddress());
+        customerZip.setText(send.getZipCode());
+        customerCityState.setValue(send.getCustomerDivision());
+        customerCountry.setValue(send.getCustomerCountry());
+        customerCountry.setItems(firstLevelDivisionDB.getCountries());
+        customerCityState.setItems(firstLevelDivisionDB.getDivision(customerCountry.getValue()));
     }
 
     /**
-     * switch used for my alerts on the customer table.
-     * @param alertNumber int indicating which error
+     * gets index from selected item for updating table view.
+     * @param selectedIndex selected on main screen.
+     */
+    public void sendIndex(int selectedIndex) {
+        Index = selectedIndex;
+    }
+
+    /**
+     * switch to hold alerts instead of cluttering code.
+     * @param alertNumber int for error to display.
      */
     public void alertSwitch(int alertNumber){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -192,29 +196,24 @@ public class addCustomerController implements Initializable {
         }
     }
 
-
     /**
-     * sets comboboxes when loaded.
-     * @param url .
-     * @param resourceBundle .
+     * populates the state province box when it is changed to new country.
+     * @param actionEvent new country selected from combobox
      */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void countrySelect(ActionEvent actionEvent) {
         try {
-            customerId.setText(String.valueOf(CustomerDB.getCustomerID().size() + 1));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            customerCountry.setItems(firstLevelDivisionDB.getCountries());
+            customerCityState.setItems(firstLevelDivisionDB.getDivision(customerCountry.getValue()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        if(customerCountry.getSelectionModel().getSelectedItem() == null){
-            customerCityState.setDisable(true);
-        }
     }
 
+    /* At this point everything on this page seems to work as expected.
+    if there are any issues might be below this comment.
+    */
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }

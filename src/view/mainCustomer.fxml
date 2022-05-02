@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="621.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainCustomer">
    <children>
       <TableView fx:id="customerTable" layoutX="28.0" layoutY="62.0" prefHeight="404.0" prefWidth="605.0">
@@ -24,7 +23,8 @@
       <Button layoutX="27.0" layoutY="475.0" mnemonicParsing="false" onAction="#addBtnAction" prefHeight="53.0" prefWidth="82.0" text="Add" />
       <Button layoutX="290.0" layoutY="475.0" mnemonicParsing="false" onAction="#updateBtnAction" prefHeight="53.0" prefWidth="82.0" text="Update" />
       <Button layoutX="551.0" layoutY="475.0" mnemonicParsing="false" onAction="#deleteBtnAction" prefHeight="53.0" prefWidth="82.0" text="Delete" />
-      <Button layoutX="537.0" layoutY="567.0" mnemonicParsing="false" onAction="#exitBtnAction" text="Exit" />
-      <TextField layoutX="484.0" layoutY="37.0" onAction="#searchCustomer" promptText="search by name" />
+      <Button layoutX="537.0" layoutY="567.0" mnemonicParsing="false" onAction="#backBtnAction" text="Back" />
+      <TextField fx:id="custSearch" layoutX="484.0" layoutY="37.0" onAction="#searchCustomer" promptText="search by name" />
+      <Button layoutX="89.0" layoutY="567.0" mnemonicParsing="false" onAction="#appointmentBtnAction" prefHeight="41.0" prefWidth="139.0" text="Go To Appointments" />
    </children>
 </AnchorPane>

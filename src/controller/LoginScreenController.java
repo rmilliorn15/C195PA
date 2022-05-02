@@ -52,6 +52,8 @@ public class LoginScreenController implements Initializable {
      */
     public void exitBtnAction(ActionEvent actionEvent) {
 
+        System.out.println("appointments created need to populate table and create getters for appointments.");
+
         if (userLocale.getCountry().equals("FR")) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Êtes-vous sûr de vouloir quitter?");
@@ -87,9 +89,9 @@ public class LoginScreenController implements Initializable {
         loginSuccessful = loginToDB.loggedIn(userName,password);
 
         if(loginSuccessful) {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/mainCustomer.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/screenSelector.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Customers");
+            stage.setTitle("View");
             stage.setScene(new Scene(root));
             stage.show();
         }

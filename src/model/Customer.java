@@ -1,5 +1,6 @@
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDateTime;
@@ -14,12 +15,6 @@ public class Customer {
     private String country;
     private String phoneNumber;
     private String customerDivision;
-
-    private LocalDateTime created;
-
-    private String createdBy;
-    private LocalDateTime lastUpdate;
-    private String updatedBy;
     private int divisionID;
     private String customerCountry;
 
@@ -61,7 +56,7 @@ public class Customer {
 
     /**
      * getter for customer name
-      * @return customer name
+     * @return customer name
      */
     public String getName() {
         return name;
@@ -69,7 +64,7 @@ public class Customer {
 
     /**
      * getter for customer address
-      * @return customer address
+     * @return customer address
      */
     public String getAddress() {
         return address;
@@ -77,7 +72,7 @@ public class Customer {
 
     /**
      * getter for customer country
-      * @return customer country
+     * @return customer country
      */
     public String getCountry() {
         return country;
@@ -85,7 +80,7 @@ public class Customer {
 
     /**
      * getter for first level division
-      * @return customer division
+     * @return customer division
      */
     public String getCustomerDivision() {
         return customerDivision;
@@ -109,7 +104,7 @@ public class Customer {
 
     /**
      * setter for country
-      * @param country
+     * @param country
      */
     public void setCountry(String country) {
         this.country = country;
@@ -134,7 +129,7 @@ public class Customer {
 
     /**
      * setter for customer division.
-      * @param customerDivision
+     * @param customerDivision
      */
     public void setCustomerDivision(String customerDivision) {
         this.customerDivision = customerDivision;
@@ -142,7 +137,7 @@ public class Customer {
 
     /**
      * setter for customer ID
-      * @param id
+     * @param id
      */
     public void setId(int id) {
         this.id = id;
@@ -150,7 +145,7 @@ public class Customer {
 
     /**
      * setter for customer Name
-      * @param name
+     * @param name
      */
     public void setName(String name) {
         this.name = name;
@@ -158,7 +153,7 @@ public class Customer {
 
     /**
      * setter for customer phone number
-      * @param phoneNumber
+     * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -166,7 +161,7 @@ public class Customer {
 
     /**
      * setter for customer Zipcode
-      * @param zipCode
+     * @param zipCode
      */
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
@@ -198,7 +193,7 @@ public class Customer {
 
     /**
      * getter for country
-      * @return customer country.
+     * @return customer country.
      */
     public String getCustomercountry() {
         return customerCountry;
@@ -228,4 +223,49 @@ public class Customer {
     public static ObservableList<Customer> getAllCustomers(){
         return customers;
     }
+
+    /**
+     * used for searching customer by ID.
+     * @param Id customer ID number
+     * @return matching customer
+     */
+    public static Customer lookupCustomer(int Id) {
+        for(int i = 0; i < customers.size(); i++) {
+            Customer searchCust = customers.get(i);
+
+            if (searchCust.getId() == Id) {
+                return searchCust;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * searches customer by name.
+     * @param partialName text being compared to existing items.
+     * @return matching customers
+     */
+    public static ObservableList<Customer> lookupCustomer(String partialName) {
+        ObservableList<Customer> namedCust = FXCollections.observableArrayList();
+
+        for (Customer searchCust : customers) {
+            if (searchCust.getName().contains(partialName)) {
+                namedCust.add(searchCust);
+            }
+        }
+        return namedCust;
+    }
+
+    /**
+     * used to update the tableview displaying current customer information
+     * @param Index sent from main customer page when selected.
+     * @param customer the new customer info being entered.
+     * @return
+     */
+    public static void updateCustomer(int Index, Customer customer){
+        customers.set(Index, customer);
+
+        // return null;
+    }
+
 }

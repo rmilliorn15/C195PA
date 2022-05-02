@@ -1,14 +1,16 @@
 package controller;
 
-import helper.JDBC;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Customer;
@@ -16,7 +18,6 @@ import model.CustomerDB;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -29,6 +30,7 @@ public class MainCustomer implements Initializable {
     public TableColumn<Customer, String> countryColumn;
     public TableColumn<Customer, String> zipColumn;
     public TableColumn<Customer, String> phoneColumn;
+    public TextField custSearch;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,6 +45,12 @@ public class MainCustomer implements Initializable {
         countryColumn.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
     }
 
+    /**
+     * opens add customer screen.
+     * @param actionEvent add button clicked
+     *
+     * @throws IOException .
+     */
     public void addBtnAction(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/view/customerInfo.fxml"));
         Stage stage = (Stage)((Button) actionEvent.getSource()).getScene().getWindow();
@@ -51,15 +59,39 @@ public class MainCustomer implements Initializable {
         stage.show();
     }
 
+    /**
+     * gets selected customer and sends to update customer screen.
+     * @param actionEvent update button clicked.
+     */
     public void updateBtnAction(ActionEvent actionEvent) {
-        customerTable.getSelectionModel().getSelectedItem();
 
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/updateCustomer.fxml"));
+            loader.load();
+
+            UpdateCustomer updateCust = loader.getController();
+            updateCust.sendCustomer(customerTable.getSelectionModel().getSelectedItem());
+            updateCust.sendIndex(customerTable.getSelectionModel().getSelectedIndex());
+
+
+            Parent root = loader.getRoot();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("Update Customer");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (NullPointerException | IOException e){
+            System.out.println("create switch for errors need update cust selected");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * deletes customer from Database and from the customer list array.
-     * @param actionEvent
-     * @throws SQLException
+     * @param actionEvent delete clicked.
+     * @throws SQLException .
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
         Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();
@@ -72,13 +104,54 @@ public class MainCustomer implements Initializable {
         }
     }
 
-    public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println("work on update button main customer screen next. Then appointments");
-        System.exit(0);
+    /**
+     * exits program with code 0
+     * @param actionEvent exit clicked.
+     */
+    public void backBtnAction(ActionEvent actionEvent) throws IOException {
+
+        Parent root = FXMLLoader.load(getClass().getResource("/view/screenSelector.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("View");
+        stage.setScene(new Scene(root));
+        stage.show();
 
 
     }
 
+    /**
+     * allows search by name or ID and returns array of matching items.
+     * @param actionEvent enter pressed while in search field.
+     */
     public void searchCustomer(ActionEvent actionEvent) {
+        try {
+            String search = custSearch.getText();
+            ObservableList<Customer> customer = Customer.lookupCustomer(search);
+            if (customer.size() == 0) {
+                int id = Integer.parseInt(search);
+                Customer searchCustomer = Customer.lookupCustomer(id);
+                if (searchCustomer != null) {
+                    customer.add(searchCustomer);
+                }
+            }
+            customerTable.setItems(customer);
+        } catch (NumberFormatException e) {
+            System.out.println("create alert for invalid search");
+        }
+    }
+
+
+    /**
+     * swaps to appointments screen
+     * @param actionEvent appointments button clicked
+     *
+     * @throws IOException .
+     */
+    public void appointmentBtnAction(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("View Customers");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
