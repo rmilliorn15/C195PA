@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import model.AppointmentsDB;
 import model.Customer;
 import model.CustomerDB;
 
@@ -90,17 +91,29 @@ public class MainCustomer implements Initializable {
 
     /**
      * deletes customer from Database and from the customer list array.
+     * also resets the auto increment if the highest id number is deleted. at least it should.
+     * also checks appointment screen to see if any appointments are assigned to this customer before allowing delete.
      * @param actionEvent delete clicked.
      * @throws SQLException .
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
+        int maxID = 0;
         Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();
-        if(deleteCustomer == null) {
+        if (deleteCustomer == null) {
             System.out.println("Create alert for select cust to delete.");
         } else {
             int deleteCustomerId = deleteCustomer.getId();
-            CustomerDB.deleteSelectedCustomer(deleteCustomerId);
-            Customer.removeCustomer(deleteCustomer);
+            if (AppointmentsDB.hasAppointment(deleteCustomerId)) {
+                System.out.println("create alert for remove appointment before deleting.");
+            } else {
+                maxID = CustomerDB.getMaxID();
+                CustomerDB.deleteSelectedCustomer(deleteCustomerId);
+
+                if (deleteCustomerId == maxID) {
+                    CustomerDB.resetAutoIncrement();
+                }
+                Customer.removeCustomer(deleteCustomer);
+            }
         }
     }
 

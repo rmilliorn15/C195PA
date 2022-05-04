@@ -25,15 +25,15 @@ public class AppointmentsDB {
                     " JOIN CONTACTS as c on apt.Contact_ID = c.Contact_ID";
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ResultSet resultSet = ps.executeQuery();
+           ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 int appointmentID = resultSet.getInt("Appointment_ID");
                 String title = resultSet.getString("Title");
                 String description = resultSet.getString("Description");
                 String location = resultSet.getString("Location");
                 String type = resultSet.getString("Type");
-                Timestamp startDate = resultSet.getTimestamp("Start");
-                Timestamp endDate = resultSet.getTimestamp("End");
+                String startDate = resultSet.getString("Start");
+                String endDate = resultSet.getString("End");
                 int customerID = resultSet.getInt("Customer_ID");
                 int userID = resultSet.getInt("User_ID");
                 int contactID = resultSet.getInt("Contact_ID");
@@ -89,7 +89,7 @@ public class AppointmentsDB {
      * @param contactID Contact ID
      * @throws SQLException .
      */
-    public static void insert(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate,
+    public static void insert(String title, String description, String location, String type, String start, String end, LocalDateTime createdDate,
                               String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID ) throws SQLException {
 
         String sql = "INSERT INTO APPOINTMENTS (Title, Description, Location, Type, Start , End, Create_Date, Created_By, " +
@@ -99,11 +99,11 @@ public class AppointmentsDB {
         ps.setString(2, description);
         ps.setString(3,location);
         ps.setString(4,type);
-        ps.setTimestamp(5,Timestamp.valueOf(start));
-        ps.setTimestamp(6,Timestamp.valueOf(end));
-        ps.setTimestamp(7, Timestamp.valueOf(createdDate));
+        ps.setString(5, String.valueOf(start));
+        ps.setString(6, String.valueOf(end));
+        ps.setString(7, String.valueOf(createdDate));
         ps.setString(8,createdBy);
-        ps.setTimestamp(9,Timestamp.valueOf(lastUpdate));
+        ps.setString(9, String.valueOf(lastUpdate));
         ps.setString(10,lastUpdatedBy);
         ps.setInt(11,customerID);
         ps.setInt(12, userID);
@@ -140,5 +140,35 @@ public class AppointmentsDB {
         ps.executeUpdate();
     }
 
+    public static int getMaxID() throws SQLException {
+        int nextId = 0;
+        String sql = "SELECT max(Appointment_ID) AS Max_Appt_ID FROM appointments";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            nextId = resultSet.getInt("Max_Appt_ID");
+        }
+        return nextId;
+    }
+
+    public static void resetAutoIncrement() throws SQLException {
+        String sql ="ALTER TABLE APPOINTMENTS AUTO_INCREMENT = 1";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
+        ps.executeUpdate();
+    }
+
+    public static boolean hasAppointment(int customerID) throws SQLException {
+        boolean hasAppointment = false;
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1,customerID);
+       ResultSet resultSet = ps.executeQuery();
+
+        if (resultSet.next()) {
+            hasAppointment = true;
+        }
+        return hasAppointment;
+    }
 
 }

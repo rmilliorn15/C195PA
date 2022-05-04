@@ -34,12 +34,18 @@ public class MainAppointments implements Initializable {
     public TableColumn<Appointment, ZonedDateTime> endColumn;
     public TableColumn<Appointment, Integer> customerIdColumn;
     public ToggleGroup viewAppointment;
+    public TableColumn<Appointment, Integer> userIdColumn;
 
     /**
      * opens add appointment page
      * @param actionEvent add button clicked
      */
-    public void addBtnAction(ActionEvent actionEvent) {
+    public void addBtnAction(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/view/addAppointment.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Add Appointment");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     /**
@@ -54,13 +60,16 @@ public class MainAppointments implements Initializable {
      * @param actionEvent delete button clicked.
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
-       Appointment deleteAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
+        int maxID = 0;
+        Appointment deleteAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
         if(deleteAppointment == null) {
             System.out.println("Create alert for select appointment to delete.");
         } else {
-            int deleteCustomerId = deleteAppointment.getAppointmentID();
-           AppointmentsDB.deleteSelectedAppointment(deleteCustomerId);
+
+            int deleteAppointmentId = deleteAppointment.getAppointmentID();
+            AppointmentsDB.deleteSelectedAppointment(deleteAppointmentId);
             Appointment.removeAppointment(deleteAppointment);
+            AppointmentsDB.resetAutoIncrement();
         }
 
 
@@ -127,6 +136,7 @@ public class MainAppointments implements Initializable {
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         startColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
     }
 }

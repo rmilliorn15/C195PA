@@ -22,7 +22,7 @@ public class User {
      * getter for User ID
       * @return User ID
      */
-    public int getUserId() {
+    public static int getUserId() {
         return userId;
     }
 

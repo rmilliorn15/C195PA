@@ -59,7 +59,7 @@ public class addCustomerController implements Initializable {
             LocalDateTime currentTime = LocalDateTime.of(nowDate,nowtime);
 
             // gets values and inserts to DB
-            id = CustomerDB.getCustomerID().size() + 1;
+            id = Integer.parseInt(customerId.getText());
             name = customerName.getText();
             address= customerStreet.getText();
             zipCode = customerZip.getText();
@@ -113,9 +113,10 @@ public class addCustomerController implements Initializable {
     public void clearBtnAction(ActionEvent actionEvent) {
         customerName.setText("");
         customerStreet.setText("");
-        customerCityState.getItems().clear();
         customerPhone.setText("");
         customerZip.setText("");
+        customerCountry.setValue("");
+        customerCityState.setDisable(true);
 
     }
 
@@ -201,7 +202,7 @@ public class addCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            customerId.setText(String.valueOf(CustomerDB.getCustomerID().size() + 1));
+            customerId.setText(String.valueOf(CustomerDB.getMaxID() + 1));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

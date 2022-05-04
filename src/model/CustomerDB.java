@@ -109,6 +109,23 @@ public class CustomerDB {
         return customerId;
     }
 
+    /**
+     * gets the next id from SQL database and uses it for auto gen id
+     * @return Customer ID
+     * @throws SQLException
+     */
+    public static int getMaxID() throws SQLException {
+        int nextId = 0;
+        String sql = "SELECT max(Customer_ID) AS Max_Cust_ID FROM customers";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            nextId = resultSet.getInt("Max_Cust_ID");
+        }
+
+        return nextId;
+    }
+// get the last record that was inserted and create an object out of that instead  "SELECT max(Customer_ID) AS Max_Cust_ID FROM customers";
 
     /**
      * deletes customer from dababase by selected ID number.
@@ -148,6 +165,17 @@ public class CustomerDB {
         ps.setString(6,lastUpdatedBy);
         ps.setInt(7,divisionID);
         ps.setInt(8,customerId);
+        ps.executeUpdate();
+    }
+
+    /**
+     * should send command to reset the auto increment on the customers table.
+     * @throws SQLException
+     */
+    public static void resetAutoIncrement() throws SQLException {
+        String sql ="ALTER TABLE CUSTOMERS AUTO_INCREMENT = 1";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+
         ps.executeUpdate();
     }
 }

@@ -43,9 +43,7 @@ public class ScreenSelector {
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println(" ************Back end of appointments mostly done. DB and java complete." +
-                "\n ************ need to work on main screen add and update appointments screens. \n " +
-                " ************ Need to add foreign Key constraints whn appointments done. \n" +
+        System.out.println("************ UPDATE APPOINTMENT SCREEN NEXT UP \n " +
                 "************ need to figure out the time change parts. ");
         System.exit(0);
     }

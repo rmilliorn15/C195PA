@@ -11,8 +11,8 @@ public class Appointment {
     String description;
     String location;
     String type;
-    Timestamp startTime;
-    Timestamp endTime;
+    String  startTime;
+    String endTime;
     int customerID;
     int userID;
     int contactID;
@@ -34,7 +34,7 @@ public class Appointment {
      * @param contactID contact ID
      * @param contactName contact Name
      */
-    public Appointment(int appointmentID, String title, String description, String location, String type, Timestamp startTime, Timestamp endTime, int customerID, int userID, int contactID, String contactName) {
+    public Appointment(int appointmentID, String title, String description, String location, String type, String startTime, String endTime, int customerID, int userID, int contactID, String contactName) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.location = location;
@@ -124,7 +124,7 @@ public class Appointment {
      * gertter for start time
      * @return start time
      */
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
@@ -132,7 +132,7 @@ public class Appointment {
      * getter for end time
      * @return end time
      */
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 

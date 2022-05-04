@@ -54,7 +54,7 @@ public class UpdateCustomer implements Initializable {
             String user = User.getUserName();
 
             // gets values and inserts to DB
-            id = CustomerDB.getCustomerID().size();
+            id = Integer.parseInt(customerId.getText());
             name = customerName.getText();
             address= customerStreet.getText();
             zipCode = customerZip.getText();
