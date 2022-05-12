@@ -6,9 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
@@ -53,6 +51,30 @@ public class MainAppointments implements Initializable {
      * @param actionEvent update button clicked.
      */
     public void updateBtnAction(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/updateAppointment.fxml"));
+            loader.load();
+
+            UpdateAppointment updateAppointment = loader.getController();
+            updateAppointment.sendAppointment(appointmentTableView.getSelectionModel().getSelectedItem());
+            updateAppointment.sendIndex(appointmentTableView.getSelectionModel().getSelectedIndex());
+
+
+            Parent root = loader.getRoot();
+            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("Update Appointment");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (NullPointerException | IOException e){
+            e.printStackTrace();
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Invalid selection");
+            error.setContentText("Please select appointment to update.");
+            error.show();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -63,16 +85,16 @@ public class MainAppointments implements Initializable {
         int maxID = 0;
         Appointment deleteAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
         if(deleteAppointment == null) {
-            System.out.println("Create alert for select appointment to delete.");
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Invalid selection");
+            error.setContentText("Please select Appointment to delete.");
+            error.show();
         } else {
-
             int deleteAppointmentId = deleteAppointment.getAppointmentID();
             AppointmentsDB.deleteSelectedAppointment(deleteAppointmentId);
             Appointment.removeAppointment(deleteAppointment);
             AppointmentsDB.resetAutoIncrement();
         }
-
-
     }
 
     /**
@@ -93,6 +115,7 @@ public class MainAppointments implements Initializable {
      * @param actionEvent Default radio button chlicked.
      */
     public void defaultRadio(ActionEvent actionEvent) {
+        appointmentTableView.setItems(AppointmentsDB.getAllAppointments());
     }
 
     /**
@@ -100,6 +123,7 @@ public class MainAppointments implements Initializable {
      * @param actionEvent month radio button selected
      */
     public void monthRadio(ActionEvent actionEvent) {
+        appointmentTableView.setItems(AppointmentsDB.getMonthAppointments());
     }
 
     /**
@@ -107,6 +131,7 @@ public class MainAppointments implements Initializable {
      * @param actionEvent week radio button selected.
      */
     public void weekRadio(ActionEvent actionEvent) {
+        appointmentTableView.setItems(AppointmentsDB.getWeekAppointments());
     }
 
     /**

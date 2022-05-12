@@ -35,14 +35,14 @@ public class LoginScreenController implements Initializable {
      * sets the users Locale
      * commented line is for testing setting to French.
      */
-    private Locale userLocale = Locale.getDefault();
+    private static Locale userLocale = Locale.getDefault();
     //  private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
 
     /**
      * sets userZone ID
-     * commented line is for testing
+     *
      */
-    private ZoneId userZoneID = ZoneId.systemDefault();
+    private static ZoneId userZoneID = ZoneId.systemDefault();
 
 
 
@@ -114,7 +114,7 @@ public class LoginScreenController implements Initializable {
         mainLoginLabel.setText("Connexion");
         exitButton.setText("Sortie");
         loginButton.setText("Connexion");
-        userLocationLabel.setText("French");
+
     }
 
 

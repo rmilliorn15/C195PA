@@ -43,4 +43,16 @@ public class loginToDB {
             return false;
         }
     }
+
+    public static Locale getUserLocale() {
+        return userLocale;
+    }
+
+    public static ZoneId getUserZoneID() {
+        return userZoneID;
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
 }

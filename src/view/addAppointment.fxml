@@ -25,8 +25,8 @@
       <TextField fx:id="addType" layoutX="91.0" layoutY="256.0" />
       <ComboBox fx:id="addContact" layoutX="380.0" layoutY="121.0" prefWidth="150.0" />
       <DatePicker fx:id="dateSelect" layoutX="380.0" layoutY="164.0" />
-      <TextField fx:id="addStart" layoutX="380.0" layoutY="211.0" promptText="Enter Time as HH : MM" />
-      <TextField fx:id="addEnd" layoutX="380.0" layoutY="256.0" promptText="Enter Time as HH : MM" />
+      <TextField fx:id="addStart" layoutX="380.0" layoutY="211.0" promptText="Enter Time as 24:MM " />
+      <TextField fx:id="addEnd" layoutX="380.0" layoutY="256.0" promptText="Enter Time as 24:MM" />
       <Label layoutX="20.0" layoutY="125.0" text="Title" />
       <Label layoutX="20.0" layoutY="168.0" text="Description" />
       <Label layoutX="20.0" layoutY="215.0" text="Location" />

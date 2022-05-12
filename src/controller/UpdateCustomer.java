@@ -77,9 +77,6 @@ public class UpdateCustomer implements Initializable {
 
                 CustomerDB.updateCustomer( id, name, address, zipCode, phoneNumber,currentTime, user , customerDivision);
                 Customer.updateCustomer(Index,newCustomer);
-
-                // FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                System.out.println("ask about the id auto increment matching DB when talk to CI or LIS.");
                 custAdded = true;
 
             }
@@ -207,10 +204,6 @@ public class UpdateCustomer implements Initializable {
             e.printStackTrace();
         }
     }
-
-    /* At this point everything on this page seems to work as expected.
-    if there are any issues might be below this comment.
-    */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

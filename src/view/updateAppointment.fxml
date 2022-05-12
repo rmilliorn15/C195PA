@@ -8,18 +8,17 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="461.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UpdateAppointment">
     <children>
-        <Button layoutX="105.0" layoutY="346.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="122.0" text="Save" />
-        <Button layoutX="394.0" layoutY="346.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="122.0" text="Cancel" />
+        <Button layoutX="105.0" layoutY="346.0" mnemonicParsing="false" onAction="#saveBtnAction" prefHeight="49.0" prefWidth="122.0" text="Save" />
+        <Button layoutX="394.0" layoutY="346.0" mnemonicParsing="false" onAction="#cancelBtnAction" prefHeight="49.0" prefWidth="122.0" text="Cancel" />
         <Label layoutX="264.0" layoutY="14.0" prefHeight="32.0" prefWidth="200.0" text="Add Appointment">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
         <Label layoutX="20.0" layoutY="81.0" text="ID" />
-        <TextField fx:id="appintmentID" disable="true" editable="false" layoutX="91.0" layoutY="77.0" />
+        <TextField fx:id="appointmentID" disable="true" editable="false" layoutX="91.0" layoutY="77.0" />
         <TextField fx:id="addTitle" layoutX="91.0" layoutY="121.0" />
         <TextField fx:id="addDescript" layoutX="91.0" layoutY="164.0" />
         <TextField fx:id="addLocation" layoutX="91.0" layoutY="211.0" />
@@ -29,12 +28,14 @@
         <TextField fx:id="addStart" layoutX="380.0" layoutY="211.0" />
         <TextField fx:id="addEnd" layoutX="380.0" layoutY="256.0" />
         <Label layoutX="20.0" layoutY="125.0" text="Title" />
-        <Label layoutX="20.0" layoutY="168.0" text="Descritption" />
+        <Label layoutX="20.0" layoutY="168.0" text="Description" />
         <Label layoutX="20.0" layoutY="215.0" text="Location" />
         <Label layoutX="20.0" layoutY="260.0" text="Type" />
         <Label layoutX="305.0" layoutY="125.0" text="Contact" />
         <Label layoutX="305.0" layoutY="168.0" text="Date" />
         <Label layoutX="305.0" layoutY="215.0" text="Start Time" />
         <Label layoutX="305.0" layoutY="260.0" text="End Time" />
+      <Label layoutX="305.0" layoutY="81.0" text="Customer ID" />
+      <TextField fx:id="addCust" layoutX="380.0" layoutY="77.0" />
     </children>
 </AnchorPane>

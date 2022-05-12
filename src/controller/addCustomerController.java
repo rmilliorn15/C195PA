@@ -80,9 +80,6 @@ public class addCustomerController implements Initializable {
             } else {
                 Customer newCustomer = new Customer(id, name, address, zipCode, phoneNumber,customerCityState.getValue(),customerDivision,customerCountry.getValue());
                 CustomerDB.insert(name, address, zipCode, phoneNumber, currentTime, user, currentTime, user, customerDivision);
-
-                // FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                System.out.println("ask about the id auto increment matching DB when talk to CI or LIS.");
                 Customer.addCustomers(newCustomer);
 
                 custAdded = true;

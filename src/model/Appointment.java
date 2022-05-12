@@ -3,6 +3,10 @@ package model;
 import javafx.collections.ObservableList;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class Appointment {
 
@@ -11,13 +15,16 @@ public class Appointment {
     String description;
     String location;
     String type;
-    String  startTime;
-    String endTime;
+    LocalDateTime  startTime;
+    LocalDateTime endTime;
     int customerID;
     int userID;
     int contactID;
     String contactName;
 
+    /**
+     * holds the created appointments.
+     */
     private static ObservableList<Appointment> appointments = AppointmentsDB.getAllAppointments();
 
     /**
@@ -34,13 +41,15 @@ public class Appointment {
      * @param contactID contact ID
      * @param contactName contact Name
      */
-    public Appointment(int appointmentID, String title, String description, String location, String type, String startTime, String endTime, int customerID, int userID, int contactID, String contactName) {
+    public Appointment(int appointmentID, String title, String description, String location, String type, LocalDateTime startTime, LocalDateTime endTime, int customerID, int userID, int contactID, String contactName) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.location = location;
         this.description = description;
         this.type = type;
+
         this.startTime = startTime;
+
         this.endTime = endTime;
         this.customerID = customerID;
         this.userID = userID;
@@ -48,8 +57,10 @@ public class Appointment {
         this.contactName = contactName;
     }
 
+
+
     /**
-     * gettesr for appointment ID
+     * getter for appointment ID
      * @return appointment ID
      */
     public int getAppointmentID() {
@@ -122,18 +133,21 @@ public class Appointment {
 
     /**
      * gertter for start time
+     *
      * @return start time
      */
-    public String getStartTime() {
-        return startTime;
+    public Timestamp getStartTime() {
+        return Timestamp.valueOf(startTime);
     }
+
 
     /**
      * getter for end time
+     *
      * @return end time
      */
-    public String getEndTime() {
-        return endTime;
+    public Timestamp getEndTime() {
+        return Timestamp.valueOf(endTime);
     }
 
     /**
@@ -168,5 +182,38 @@ public class Appointment {
     public static ObservableList<Appointment> getAllAppointments() {
         return appointments;
     }
+
+
+    /**
+     * checks business hours and makes sure appointment is during those hours
+     * @param apptTime
+     * @return
+     */
+    public static boolean checkBusinessHours(LocalTime apptTime) {
+
+        LocalTime open = LocalTime.of(8,0);
+        LocalTime close = LocalTime.of(22,0);
+        if (apptTime.isAfter(open) && apptTime.isBefore(close)){
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public static LocalDateTime convertToUserTime(LocalDateTime enteredTime){
+        LocalDateTime userTime = null;
+
+       ZonedDateTime zonedDateTime = enteredTime.atZone(ZoneId.of("UTC"));
+       zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
+       userTime = zonedDateTime.toLocalDateTime();
+
+        return userTime;
+    }
+
+
+
 }
+
 

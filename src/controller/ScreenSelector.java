@@ -43,8 +43,7 @@ public class ScreenSelector {
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println("************ UPDATE APPOINTMENT SCREEN NEXT UP \n " +
-                "************ need to figure out the time change parts. ");
+        System.out.println("************ need to figure out the time change parts. ");
         System.exit(0);
     }
 }

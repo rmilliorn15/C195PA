@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -15,6 +16,7 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -55,8 +57,8 @@ public class AddAppointment implements Initializable {
         String location;
         String type;
         LocalDateTime now = LocalDateTime.now();
-        String startDateTime;
-        String  endDateTime;
+        LocalDateTime startDateTime;
+        LocalDateTime  endDateTime;
         int customerID;
         String userName;
         int userID;
@@ -65,7 +67,7 @@ public class AddAppointment implements Initializable {
         LocalDate selectedDate;
         LocalTime startTime;
         LocalTime endTime;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH : mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         id = Integer.parseInt(appointmentID.getText());
         title = addTitle.getText();
@@ -75,28 +77,43 @@ public class AddAppointment implements Initializable {
         selectedDate = dateSelect.getValue();
         startTime = LocalTime.parse(addStart.getText(), formatter);
         endTime = LocalTime.parse(addEnd.getText(), formatter);
-        startDateTime = String.valueOf(LocalDateTime.of(selectedDate, startTime));
-        endDateTime = String.valueOf(LocalDateTime.of(selectedDate, endTime));
+        startDateTime = LocalDateTime.of(selectedDate, startTime);
+        endDateTime = LocalDateTime.of(selectedDate, endTime);
         customerID = Integer.parseInt(addCust.getText());
         userName = User.getUserName();
         userID = User.getUserId();
         contactName = String.valueOf(addContact.getValue());
         contactID = ContactDB.getContactId(contactName);
 
+        if(Appointment.checkBusinessHours(startDateTime.toLocalTime())) {
+            if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
 
+                //FIXME!!!!!!!!!!!!!!!!! create alert for input issues. CHANGE TO UTC TO STORE TIMES.
 
-        //FIXME!!!!!!!!!!!!!!!!! create alert for input issues. CHANGE TO UTC TO STORE TIMES.
-        Appointment newAppt = new Appointment(id, title,description,location,type,startDateTime,endDateTime,customerID, userID, contactID, contactName);
-        Appointment.addAppointment(newAppt);
-        AppointmentsDB.insert(title,description,location,type, startDateTime,endDateTime, now, userName, now, userName,customerID,userID,contactID);
+                Appointment newAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                Appointment.addAppointment(newAppt);
+                AppointmentsDB.insert(title, description, location, type, startDateTime, endDateTime, now, userName, now, userName, customerID, userID, contactID);
 
-        apptAdded = true;
-        if(apptAdded){
-            Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Appointments");
-            stage.setScene(new Scene(root));
-            stage.show();
+                apptAdded = true;
+                if (apptAdded) {
+                    Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
+                    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                    stage.setTitle("Appointments");
+                    stage.setScene(new Scene(root));
+                    stage.show();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Start or end Time");
+                alert.setHeaderText("Please enter an End time that is after the Start time.");
+                alert.show();
+            }
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Start or end Time");
+            alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
+            alert.show();
         }
 
     }

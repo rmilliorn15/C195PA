@@ -32,8 +32,8 @@ public class AppointmentsDB {
                 String description = resultSet.getString("Description");
                 String location = resultSet.getString("Location");
                 String type = resultSet.getString("Type");
-                String startDate = resultSet.getString("Start");
-                String endDate = resultSet.getString("End");
+                LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
                 int customerID = resultSet.getInt("Customer_ID");
                 int userID = resultSet.getInt("User_ID");
                 int contactID = resultSet.getInt("Contact_ID");
@@ -89,7 +89,7 @@ public class AppointmentsDB {
      * @param contactID Contact ID
      * @throws SQLException .
      */
-    public static void insert(String title, String description, String location, String type, String start, String end, LocalDateTime createdDate,
+    public static void insert(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate,
                               String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID ) throws SQLException {
 
         String sql = "INSERT INTO APPOINTMENTS (Title, Description, Location, Type, Start , End, Create_Date, Created_By, " +
@@ -99,8 +99,8 @@ public class AppointmentsDB {
         ps.setString(2, description);
         ps.setString(3,location);
         ps.setString(4,type);
-        ps.setString(5, String.valueOf(start));
-        ps.setString(6, String.valueOf(end));
+        ps.setTimestamp(5, Timestamp.valueOf(start));
+        ps.setTimestamp(6, Timestamp.valueOf(end));
         ps.setString(7, String.valueOf(createdDate));
         ps.setString(8,createdBy);
         ps.setString(9, String.valueOf(lastUpdate));
@@ -113,6 +113,11 @@ public class AppointmentsDB {
         ps.executeUpdate();
     }
 
+    /**
+     * deletes selected item from Database
+     * @param appointmentID selected appointment's id
+     * @throws SQLException
+     */
     public static void deleteSelectedAppointment(int appointmentID) throws SQLException {
         String sql = "DELETE FROM APPOINTMENTS WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -120,26 +125,48 @@ public class AppointmentsDB {
         ps.executeUpdate();
     }
 
-    public static void updateAppointment( int appointmentId, String title, String description, String type, LocalDateTime start,
+    /**
+     * updates the selected appointment
+     * @param appointmentId appointment id
+     * @param title title
+     * @param description description
+     * @param location location
+     * @param type type
+     * @param start start time
+     * @param end end time
+     * @param lastUpdate last updated time
+     * @param lastUpdatedBy updated by
+     * @param customerId customer id
+     * @param userId user id
+     * @param contactId contact id.
+     * @throws SQLException
+     */
+    public static void updateAppointment( int appointmentId, String title, String description,String location, String type, LocalDateTime start,
                                           LocalDateTime end, LocalDateTime lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) throws SQLException {
         String sql = "UPDATE APPOINTMENTS SET Title = ?, Description = ?, Location = ? , Type = ?, Start = ?, End = ?, " +
-                "Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+                "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, title);
         ps.setString(2, description);
-        ps.setString(3,type);
-        ps.setTimestamp(4, Timestamp.valueOf(start));
-        ps.setTimestamp(5, Timestamp.valueOf(end));
-        ps.setTimestamp(6,Timestamp.valueOf(lastUpdate) );
-        ps.setString(7,lastUpdatedBy);
-        ps.setInt(8,customerId);
-        ps.setInt(9,userId);
-        ps.setInt(10,contactId);
-        ps.setInt(11,appointmentId);
+        ps.setString(3,location);
+        ps.setString(4,type);
+        ps.setTimestamp(5, Timestamp.valueOf(start));
+        ps.setTimestamp(6, Timestamp.valueOf(end));
+        ps.setString(7,String.valueOf(lastUpdate) );
+        ps.setString(8,lastUpdatedBy);
+        ps.setInt(9,customerId);
+        ps.setInt(10,userId);
+        ps.setInt(11,contactId);
+        ps.setInt(12,appointmentId);
 
         ps.executeUpdate();
     }
 
+    /**
+     * returns the highest in use Id number.
+     * @return highest id in use.
+     * @throws SQLException
+     */
     public static int getMaxID() throws SQLException {
         int nextId = 0;
         String sql = "SELECT max(Appointment_ID) AS Max_Appt_ID FROM appointments";
@@ -151,6 +178,10 @@ public class AppointmentsDB {
         return nextId;
     }
 
+    /**
+     * resets Id auto increment counter when deleting items.
+     * @throws SQLException
+     */
     public static void resetAutoIncrement() throws SQLException {
         String sql ="ALTER TABLE APPOINTMENTS AUTO_INCREMENT = 1";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -158,6 +189,12 @@ public class AppointmentsDB {
         ps.executeUpdate();
     }
 
+    /**
+     * checks appointment list to see if selected customer is assigned to an appointment.
+     * @param customerID selcted customer
+     * @return true if appointment found with customer id assigned.
+     * @throws SQLException
+     */
     public static boolean hasAppointment(int customerID) throws SQLException {
         boolean hasAppointment = false;
         String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";

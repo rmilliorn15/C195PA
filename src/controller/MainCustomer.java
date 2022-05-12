@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.AppointmentsDB;
@@ -65,8 +62,6 @@ public class MainCustomer implements Initializable {
      * @param actionEvent update button clicked.
      */
     public void updateBtnAction(ActionEvent actionEvent) {
-
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/updateCustomer.fxml"));
@@ -83,7 +78,11 @@ public class MainCustomer implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
         } catch (NullPointerException | IOException e){
-            System.out.println("create switch for errors need update cust selected");
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Invalid selection");
+            error.setContentText("Please select customer to delete.");
+            error.show();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -97,22 +96,30 @@ public class MainCustomer implements Initializable {
      * @throws SQLException .
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
-        int maxID = 0;
+
         Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();
         if (deleteCustomer == null) {
-            System.out.println("Create alert for select cust to delete.");
+
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Invalid selection");
+            error.setContentText("Please select customer to delete.");
+            error.show();
         } else {
             int deleteCustomerId = deleteCustomer.getId();
             if (AppointmentsDB.hasAppointment(deleteCustomerId)) {
-                System.out.println("create alert for remove appointment before deleting.");
+                Alert warning = new Alert(Alert.AlertType.WARNING);
+                warning.setHeaderText("Customer " + deleteCustomer.getName() + " not deleted.");
+                warning.setContentText("Customer not deleted. Please Remove appointments \n assigned to "
+                        + deleteCustomer.getName() +" and try again.");
+                warning.showAndWait();
             } else {
-                maxID = CustomerDB.getMaxID();
-                CustomerDB.deleteSelectedCustomer(deleteCustomerId);
+                Alert inform = new Alert(Alert.AlertType.INFORMATION);
+                inform.setHeaderText("Customer " + deleteCustomer.getName() + " Deleted");
 
-                if (deleteCustomerId == maxID) {
-                    CustomerDB.resetAutoIncrement();
-                }
+                CustomerDB.deleteSelectedCustomer(deleteCustomerId);
+                CustomerDB.resetAutoIncrement();
                 Customer.removeCustomer(deleteCustomer);
+                inform.show();
             }
         }
     }
@@ -149,7 +156,10 @@ public class MainCustomer implements Initializable {
             }
             customerTable.setItems(customer);
         } catch (NumberFormatException e) {
-            System.out.println("create alert for invalid search");
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Search");
+            error.setContentText("No matching customers found.");
+            error.show();
         }
     }
 
