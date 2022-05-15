@@ -9,13 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.loginToDB;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.time.*;
-
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -43,6 +43,8 @@ public class LoginScreenController implements Initializable {
      *
      */
     private static ZoneId userZoneID = ZoneId.systemDefault();
+
+
 
 
 
@@ -94,11 +96,13 @@ public class LoginScreenController implements Initializable {
             stage.setTitle("View");
             stage.setScene(new Scene(root));
             stage.show();
+            Appointment.nextAppt();
         }
         else {
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
             alert.showAndWait();
         }
+
 
 
     }
@@ -118,6 +122,8 @@ public class LoginScreenController implements Initializable {
     }
 
 
+
+
     /**
      * initallizes and sets text fields to correct language.
      * @param url
@@ -129,7 +135,5 @@ public class LoginScreenController implements Initializable {
             setTextLanguage();
         }
         userLocationLabel.setText(String.valueOf(userZoneID));
-
-
     }
 }

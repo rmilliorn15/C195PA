@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -37,6 +35,7 @@ public class UpdateAppointment implements Initializable {
 
     /**
      * gets information from main appointment screen and sends to update screen
+     *
      * @param send selecred from main screen
      * @throws SQLException
      */
@@ -56,12 +55,12 @@ public class UpdateAppointment implements Initializable {
 
     /**
      * gets the index used for updating the table view.
+     *
      * @param selectedIndex index of selected item.
      */
     public void sendIndex(int selectedIndex) {
         index = selectedIndex;
     }
-
 
 
     @Override
@@ -72,12 +71,13 @@ public class UpdateAppointment implements Initializable {
 
     /**
      * saves changes to seleceted appointment and returns to main appointments if successful
+     *
      * @param actionEvent save clicked
      * @throws SQLException
      * @throws IOException
      */
     public void saveBtnAction(ActionEvent actionEvent) throws SQLException, IOException {
-        boolean apptAdded= false;
+        boolean apptAdded = false;
         int id;
         String title;
         String description;
@@ -85,7 +85,7 @@ public class UpdateAppointment implements Initializable {
         String type;
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startDateTime;
-        LocalDateTime  endDateTime;
+        LocalDateTime endDateTime;
         int customerID;
         String userName;
         int userID;
@@ -94,6 +94,8 @@ public class UpdateAppointment implements Initializable {
         LocalDate selectedDate;
         LocalTime startTime;
         LocalTime endTime;
+        ZonedDateTime zonedStart;
+        ZonedDateTime zonedEnd;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         id = Integer.parseInt(appointmentID.getText());
@@ -106,33 +108,51 @@ public class UpdateAppointment implements Initializable {
         endTime = LocalTime.parse(addEnd.getText(), formatter);
         startDateTime = LocalDateTime.of(selectedDate, startTime);
         endDateTime = LocalDateTime.of(selectedDate, endTime);
+        zonedStart = ZonedDateTime.of(startDateTime, loginToDB.getUserZoneID());
+        zonedEnd = ZonedDateTime.of(endDateTime, loginToDB.getUserZoneID());
         customerID = Integer.parseInt(addCust.getText());
         userName = User.getUserName();
         userID = User.getUserId();
         contactName = String.valueOf(addContact.getValue());
         contactID = ContactDB.getContactId(contactName);
 
-        System.out.println("create alerts for invalid inputs update appointment line 108");
-        Appointment updateAppt = new Appointment(id, title,description,location,type,startDateTime,endDateTime,customerID, userID, contactID, contactName);
-        Appointment.updateAppointment(index, updateAppt);
-        AppointmentsDB.updateAppointment(id, title,description,location,type,startDateTime,endDateTime,now,userName,customerID,userID,contactID);
-        apptAdded = true;
+        System.out.println("create alerts for invalid inputs update appointment line 117");
 
-        if (apptAdded){
-            Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-            Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            stage.setTitle("Appointments");
-            stage.setScene(new Scene(root));
-            stage.show();
+       // if (AppointmentsDB.hasAppointment(customerID)) { setup for overlap. needed later.
+
+      //  } else {
+            if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
+                if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
+
+                    zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
+                    zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
+                    startDateTime = zonedStart.toLocalDateTime();
+                    endDateTime = zonedEnd.toLocalDateTime();
+
+
+                    Appointment updateAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                    Appointment.updateAppointment(index, updateAppt);
+                    AppointmentsDB.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, now, userName, customerID, userID, contactID);
+                    apptAdded = true;
+
+                    if (apptAdded) {
+                        Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
+                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                        stage.setTitle("Appointments");
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    }
+                }
+            }
         }
-    }
+    // }
 
     /**
      * cancels changes and returns to main appointments screen
      * @param actionEvent cancel clicked
      * @throws IOException
      */
-    public void cancelBtnAction(ActionEvent actionEvent) throws IOException {
+    public void cancelBtnAction (ActionEvent actionEvent) throws IOException {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Are you sure you want to cancel");
         confirm.setHeaderText("All changes will be lost. Press ok to cancel and return to main screen");
@@ -145,4 +165,6 @@ public class UpdateAppointment implements Initializable {
             stage.show();
         }
     }
+
+
 }

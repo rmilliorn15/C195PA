@@ -1,12 +1,12 @@
 package model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class Appointment {
 
@@ -47,9 +47,7 @@ public class Appointment {
         this.location = location;
         this.description = description;
         this.type = type;
-
         this.startTime = startTime;
-
         this.endTime = endTime;
         this.customerID = customerID;
         this.userID = userID;
@@ -137,7 +135,10 @@ public class Appointment {
      * @return start time
      */
     public Timestamp getStartTime() {
-        return Timestamp.valueOf(startTime);
+        ZonedDateTime zonedDateTime = startTime.atZone(ZoneOffset.UTC);
+        zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of(String.valueOf(loginToDB.getUserZoneID())));
+        LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
+        return Timestamp.valueOf(zonedStartTime);
     }
 
 
@@ -147,7 +148,10 @@ public class Appointment {
      * @return end time
      */
     public Timestamp getEndTime() {
-        return Timestamp.valueOf(endTime);
+        ZonedDateTime zonedDateTime = endTime.atZone(ZoneOffset.UTC);
+        zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of(String.valueOf(loginToDB.getUserZoneID())));
+        LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
+        return Timestamp.valueOf(zonedStartTime);
     }
 
     /**
@@ -189,11 +193,14 @@ public class Appointment {
      * @param apptTime
      * @return
      */
-    public static boolean checkBusinessHours(LocalTime apptTime) {
+    public static boolean checkBusinessHours(LocalDateTime apptTime) {
+        ZonedDateTime zoneAppt = apptTime.atZone(ZoneId.systemDefault());
+        zoneAppt = zoneAppt.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        apptTime = zoneAppt.toLocalDateTime();
 
         LocalTime open = LocalTime.of(8,0);
         LocalTime close = LocalTime.of(22,0);
-        if (apptTime.isAfter(open) && apptTime.isBefore(close)){
+        if ((apptTime.toLocalTime().isAfter(open) || apptTime.toLocalTime().equals(open)) && apptTime.toLocalTime().isBefore(close)){
             return true;
         }
         else {
@@ -202,16 +209,95 @@ public class Appointment {
 
     }
 
-    public static LocalDateTime convertToUserTime(LocalDateTime enteredTime){
-        LocalDateTime userTime = null;
+    /**
+     * returns appointments within the next week
+     * @return  array of appointments in the next week
+     */
+    public static ObservableList<Appointment> getWeekAppointments() {
 
-       ZonedDateTime zonedDateTime = enteredTime.atZone(ZoneId.of("UTC"));
-       zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
-       userTime = zonedDateTime.toLocalDateTime();
+        LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
+        LocalDateTime endTime = beginTime.plusWeeks(1);
+        ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
+        for( int i = 0; i < appointments.size(); i++) {
+            Appointment searchAppt = appointments.get(i);
+            LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
 
-        return userTime;
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+                weeklyAppointments.add(searchAppt);
+            }
+        }
+
+
+        return weeklyAppointments;
     }
 
+    /**
+     * returns an array of appointments in the next month
+     * @return array of appointments in the next month
+     */
+    public static ObservableList<Appointment> getMonthAppointments() {
+        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
+
+        LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
+        LocalDateTime endTime = beginTime.plusMonths(1);
+        for( int i = 0; i < appointments.size(); i++) {
+            Appointment searchAppt = appointments.get(i);
+            LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
+
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+                monthlyAppointments.add(searchAppt);
+            }
+        }
+
+
+        return monthlyAppointments;
+    }
+
+    /**
+     * checks appointments for any in the next 15 minutes.
+     * @return appointments in the next 15 minutes.
+     */
+    public static ObservableList<Appointment> upcomingAppointment(){
+
+
+        LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
+        LocalDateTime endTime = beginTime.plusMinutes(15);
+        ObservableList<Appointment> comingAppointment = FXCollections.observableArrayList();
+        for( int i = 0; i < appointments.size(); i++) {
+            Appointment searchAppt = appointments.get(i);
+            ZonedDateTime zonedSearch = ZonedDateTime.from(searchAppt.getStartTime().toLocalDateTime().atZone(loginToDB.getUserZoneID()));
+            zonedSearch = zonedSearch.withZoneSameInstant(loginToDB.getUserZoneID());
+            LocalDateTime searchTime = zonedSearch.toLocalDateTime();
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+                comingAppointment.add(searchAppt);
+                return  comingAppointment;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * shows alert for the upcoming appointment when logged in.
+     */
+    public static void nextAppt(){
+        if( Appointment.upcomingAppointment() != null){
+            for(int i =0; i < upcomingAppointment().size(); i++) {
+                Appointment nextAppt = upcomingAppointment().get(i);
+                Alert warning = new Alert(Alert.AlertType.WARNING);
+                warning.setTitle("Upcoming Appointment!");
+                warning.setHeaderText("Appointment in the next 15 minutes!");
+                warning.setContentText("Appointment ID " + nextAppt.getAppointmentID() + " Date and Time " + nextAppt.getStartTime());
+                warning.show();
+            }
+
+        }else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Appointments Upcoming");
+            alert.setHeaderText("No appointments in next 15 minutes.");
+            alert.show();
+        }
+
+    }
 
 
 }

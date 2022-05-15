@@ -5,7 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class AppointmentsDB {
 
@@ -25,7 +27,7 @@ public class AppointmentsDB {
                     " JOIN CONTACTS as c on apt.Contact_ID = c.Contact_ID";
             PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-           ResultSet resultSet = ps.executeQuery();
+            ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 int appointmentID = resultSet.getInt("Appointment_ID");
                 String title = resultSet.getString("Title");
@@ -50,27 +52,9 @@ public class AppointmentsDB {
         return appointmentList;
     }
 
-    /**
-     * returns appointments within the next week
-     * @return  array of appointments in the next week
-     */
-    public static ObservableList<Appointment> getWeekAppointments() {
-        ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
 
 
-        return weeklyAppointments;
-    }
 
-    /**
-     * returns an array of appointments in the next month
-     * @return array of appointments in the next month
-     */
-    public static ObservableList<Appointment> getMonthAppointments() {
-        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
-
-
-        return monthlyAppointments;
-    }
 
     /**
      * adds new appointment to database.
@@ -200,12 +184,54 @@ public class AppointmentsDB {
         String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ps.setInt(1,customerID);
-       ResultSet resultSet = ps.executeQuery();
+        ResultSet resultSet = ps.executeQuery();
 
         if (resultSet.next()) {
             hasAppointment = true;
         }
         return hasAppointment;
+    }
+
+    public static LocalDate getCustStartDate(int custID) throws SQLException {
+        LocalDate startDate = null;
+
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1,custID);
+        ResultSet resultSet = ps.executeQuery();
+
+        while (resultSet.next()) {
+             startDate = resultSet.getTimestamp("Start").toLocalDateTime().toLocalDate();
+        }
+        return startDate;
+    }
+
+    public static LocalTime getCustStartTime(int custID) throws SQLException {
+        LocalTime startTime = null;
+
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1,custID);
+        ResultSet resultSet = ps.executeQuery();
+
+        while (resultSet.next()) {
+            startTime = resultSet.getTimestamp("Start").toLocalDateTime().toLocalTime();
+        }
+        return startTime;
+    }
+
+    public static LocalTime getCustEndTime(int custID) throws SQLException {
+        LocalTime endTime = null;
+
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1,custID);
+        ResultSet resultSet = ps.executeQuery();
+
+        while (resultSet.next()) {
+             endTime = resultSet.getTimestamp("End").toLocalDateTime().toLocalTime();
+        }
+        return endTime;
     }
 
 }

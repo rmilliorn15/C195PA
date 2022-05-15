@@ -123,7 +123,7 @@ public class MainAppointments implements Initializable {
      * @param actionEvent month radio button selected
      */
     public void monthRadio(ActionEvent actionEvent) {
-        appointmentTableView.setItems(AppointmentsDB.getMonthAppointments());
+        appointmentTableView.setItems(Appointment.getMonthAppointments());
     }
 
     /**
@@ -131,7 +131,7 @@ public class MainAppointments implements Initializable {
      * @param actionEvent week radio button selected.
      */
     public void weekRadio(ActionEvent actionEvent) {
-        appointmentTableView.setItems(AppointmentsDB.getWeekAppointments());
+        appointmentTableView.setItems(Appointment.getWeekAppointments());
     }
 
     /**
@@ -146,6 +146,7 @@ public class MainAppointments implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
 
 
 

@@ -31,11 +31,12 @@ public class loginToDB {
 
         ResultSet rs = ps.executeQuery();
         if (rs.next()){
-           String userNameLog = rs.getString("User_Name");
-           int userIdLog = rs.getInt("User_ID");
+            String userNameLog = rs.getString("User_Name");
+            int userIdLog = rs.getInt("User_ID");
             loggedInUser = new User(userIdLog, userNameLog);
             userLocale = Locale.getDefault();
             userZoneID = ZoneId.systemDefault();
+
             return true;
         }
         else {
