@@ -34,6 +34,11 @@ public class AddAppointment implements Initializable {
     public TextField addCust;
 
 
+    /**
+     * loads screen and populates id field with highest number from DB
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -47,6 +52,12 @@ public class AddAppointment implements Initializable {
 
     }
 
+    /**
+     * creates new appointment and saves copy to Database.
+     * @param actionEvent save button clicked.
+     * @throws IOException
+     * @throws SQLException
+     */
     public void saveBtnAction(ActionEvent actionEvent) throws IOException, SQLException {
         boolean apptAdded = false;
         int id;

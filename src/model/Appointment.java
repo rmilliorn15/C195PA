@@ -55,8 +55,6 @@ public class Appointment {
         this.contactName = contactName;
     }
 
-
-
     /**
      * getter for appointment ID
      * @return appointment ID
@@ -141,7 +139,6 @@ public class Appointment {
         return Timestamp.valueOf(zonedStartTime);
     }
 
-
     /**
      * getter for end time
      *
@@ -187,10 +184,9 @@ public class Appointment {
         return appointments;
     }
 
-
     /**
      * checks business hours and makes sure appointment is during those hours
-     * @param apptTime
+     * @param apptTime appointment time when adding/ changing appointment
      * @return
      */
     public static boolean checkBusinessHours(LocalDateTime apptTime) {
@@ -200,12 +196,7 @@ public class Appointment {
 
         LocalTime open = LocalTime.of(8,0);
         LocalTime close = LocalTime.of(22,0);
-        if ((apptTime.toLocalTime().isAfter(open) || apptTime.toLocalTime().equals(open)) && apptTime.toLocalTime().isBefore(close)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (apptTime.toLocalTime().isAfter(open) || apptTime.toLocalTime().equals(open)) && apptTime.toLocalTime().isBefore(close);
 
     }
 
@@ -218,11 +209,10 @@ public class Appointment {
         LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
         LocalDateTime endTime = beginTime.plusWeeks(1);
         ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
-        for( int i = 0; i < appointments.size(); i++) {
-            Appointment searchAppt = appointments.get(i);
+        for (Appointment searchAppt : appointments) {
             LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
 
-            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)) {
                 weeklyAppointments.add(searchAppt);
             }
         }
@@ -240,11 +230,10 @@ public class Appointment {
 
         LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
         LocalDateTime endTime = beginTime.plusMonths(1);
-        for( int i = 0; i < appointments.size(); i++) {
-            Appointment searchAppt = appointments.get(i);
+        for (Appointment searchAppt : appointments) {
             LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
 
-            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)) {
                 monthlyAppointments.add(searchAppt);
             }
         }
@@ -263,14 +252,13 @@ public class Appointment {
         LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
         LocalDateTime endTime = beginTime.plusMinutes(15);
         ObservableList<Appointment> comingAppointment = FXCollections.observableArrayList();
-        for( int i = 0; i < appointments.size(); i++) {
-            Appointment searchAppt = appointments.get(i);
+        for (Appointment searchAppt : appointments) {
             ZonedDateTime zonedSearch = ZonedDateTime.from(searchAppt.getStartTime().toLocalDateTime().atZone(loginToDB.getUserZoneID()));
             zonedSearch = zonedSearch.withZoneSameInstant(loginToDB.getUserZoneID());
             LocalDateTime searchTime = zonedSearch.toLocalDateTime();
-            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)){
+            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)) {
                 comingAppointment.add(searchAppt);
-                return  comingAppointment;
+                return comingAppointment;
             }
         }
         return null;

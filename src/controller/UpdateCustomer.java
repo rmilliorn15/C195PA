@@ -160,36 +160,36 @@ public class UpdateCustomer implements Initializable {
     public void alertSwitch(int alertNumber){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         switch (alertNumber) {
-            case 1:
+            case 1 -> {
                 alert.setTitle("Please Enter Name");
                 alert.setHeaderText("Please enter customer name");
                 alert.show();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 alert.setTitle("Please Enter Address");
                 alert.setHeaderText("Please enter customer address");
                 alert.show();
-                break;
-            case 3:
+            }
+            case 3 -> {
                 alert.setTitle("Please Enter Zip/Postal code");
                 alert.setHeaderText("Please enter customer Zip or postal code");
                 alert.show();
-                break;
-            case 4:
+            }
+            case 4 -> {
                 alert.setTitle("Please Enter Phone Number");
                 alert.setHeaderText("Please enter customer Phone Number");
                 alert.show();
-                break;
-            case 5:
+            }
+            case 5 -> {
                 alert.setTitle("Please select customer state/province");
                 alert.setHeaderText("Please select a state or province.");
                 alert.show();
-                break;
-            case 6:
+            }
+            case 6 -> {
                 alert.setTitle("Number Format Exception");
                 alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
                 alert.show();
-                break;
+            }
         }
     }
 

@@ -45,9 +45,6 @@ public class LoginScreenController implements Initializable {
     private static ZoneId userZoneID = ZoneId.systemDefault();
 
 
-
-
-
     /**
      * Confirms user wants to exit then closes the program. DONE
      * @param actionEvent exit button clicked
@@ -120,9 +117,6 @@ public class LoginScreenController implements Initializable {
         loginButton.setText("Connexion");
 
     }
-
-
-
 
     /**
      * initallizes and sets text fields to correct language.

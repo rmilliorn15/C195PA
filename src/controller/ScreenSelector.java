@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 
 public class ScreenSelector implements Initializable {
 
-    static ObservableList<Appointment> appointments = Appointment.upcomingAppointment();
 
 
     /**

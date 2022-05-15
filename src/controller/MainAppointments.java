@@ -11,8 +11,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.AppointmentsDB;
-import model.Customer;
-import model.CustomerDB;
 
 import java.io.IOException;
 import java.net.URL;
@@ -148,8 +146,11 @@ public class MainAppointments implements Initializable {
     }
 
 
-
-
+    /**
+     * loads screen and populated appointment table.
+     * @param url
+     * @param resourceBundle
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentTableView.setItems(Appointment.getAllAppointments());

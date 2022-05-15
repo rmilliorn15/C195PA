@@ -30,6 +30,11 @@ public class MainCustomer implements Initializable {
     public TableColumn<Customer, String> phoneColumn;
     public TextField custSearch;
 
+    /**
+     * loads screen and populates customer table from DB
+     * @param url .
+     * @param resourceBundle .
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
