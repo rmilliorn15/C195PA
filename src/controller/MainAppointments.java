@@ -8,14 +8,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.AppointmentsDB;
+import model.User;
+import model.loginToDB;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainAppointments implements Initializable {
@@ -80,7 +86,6 @@ public class MainAppointments implements Initializable {
      * @param actionEvent delete button clicked.
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
-        int maxID = 0;
         Appointment deleteAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
         if(deleteAppointment == null) {
             Alert error = new Alert(Alert.AlertType.ERROR);
@@ -88,10 +93,16 @@ public class MainAppointments implements Initializable {
             error.setContentText("Please select Appointment to delete.");
             error.show();
         } else {
-            int deleteAppointmentId = deleteAppointment.getAppointmentID();
-            AppointmentsDB.deleteSelectedAppointment(deleteAppointmentId);
-            Appointment.removeAppointment(deleteAppointment);
-            AppointmentsDB.resetAutoIncrement();
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setHeaderText("Delete Appointment?");
+            confirm.setContentText("Are you sure you want to delete Appointment " + deleteAppointment.getAppointmentID() + "?");
+            Optional<ButtonType> result = confirm.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                int deleteAppointmentId = deleteAppointment.getAppointmentID();
+                AppointmentsDB.deleteSelectedAppointment(deleteAppointmentId);
+                Appointment.removeAppointment(deleteAppointment);
+                AppointmentsDB.resetAutoIncrement();
+            }
         }
     }
 
@@ -145,6 +156,55 @@ public class MainAppointments implements Initializable {
         stage.show();
     }
 
+    /**
+     * Displays alert for cancelling the appointment then cancels the appointment if confirmed.
+     * @param actionEvent cancel clicked.
+     * @throws SQLException
+     */
+    public void cancelButtonAction(ActionEvent actionEvent) throws SQLException {
+        Appointment cancelAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
+        int index = appointmentTableView.getSelectionModel().getSelectedIndex();
+        if( cancelAppointment == null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setHeaderText("Invalid selection");
+            error.setContentText("Please select Appointment to cancel.");
+            error.show();
+        }
+        else {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Appointment will be cancelled");
+            confirm.setContentText("Appointment Id# " + cancelAppointment.getAppointmentID() + " of Type " + cancelAppointment.getType() + " will be cancelled. Proceed?");
+            Optional<ButtonType> result = confirm.showAndWait();
+            int id = cancelAppointment.getAppointmentID();
+            String title = "Cancelled";
+            String description = "Cancelled";
+            String location = "Cancelled";
+            String type = "Cancelled";
+            LocalDateTime startDateTime = cancelAppointment.getStartTime().toLocalDateTime();
+            LocalDateTime endDateTime = cancelAppointment.getEndTime().toLocalDateTime();
+
+            ZonedDateTime zonedStart = ZonedDateTime.of(startDateTime, loginToDB.getUserZoneID());
+            ZonedDateTime zonedEnd = ZonedDateTime.of(endDateTime, loginToDB.getUserZoneID());
+            int customerID = cancelAppointment.getCustomerID();
+            int contactID = cancelAppointment.getContactID();
+            String contactName = cancelAppointment.getContactName();
+            LocalDateTime now = LocalDateTime.now();
+            String userName = User.getUserName();
+            int userID = User.getUserId();
+            zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
+            zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
+            startDateTime = zonedStart.toLocalDateTime();
+            endDateTime = zonedEnd.toLocalDateTime();
+
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                Appointment updateAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                Appointment.updateAppointment(index, updateAppt);
+                AppointmentsDB.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, now, userName, customerID, userID, contactID);
+            }
+        }
+    }
 
     /**
      * loads screen and populated appointment table.
@@ -166,4 +226,6 @@ public class MainAppointments implements Initializable {
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
     }
+
 }
+

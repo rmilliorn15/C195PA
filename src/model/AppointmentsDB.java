@@ -19,7 +19,6 @@ public class AppointmentsDB {
     public static ObservableList<Appointment> getAllAppointments() {
         ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
 
-
         try {
 
             String sql = "SELECT apt.Appointment_ID, apt.Title, apt.Description, apt.Location, apt.Type, apt.Start, apt.End, apt.Customer_ID, u.User_ID, c.Contact_ID, c.Contact_Name" +
@@ -52,44 +51,41 @@ public class AppointmentsDB {
         return appointmentList;
     }
 
-
-
-
-
     /**
      * adds new appointment to database.
-     * @param title title
-     * @param description description
-     * @param location location
-     * @param type type
-     * @param start start time
-     * @param end end time
-     * @param createdDate created date
-     * @param createdBy user that created appointment
-     * @param lastUpdate last update for appointment. should be the same as created for Insert
+     *
+     * @param title         title
+     * @param description   description
+     * @param location      location
+     * @param type          type
+     * @param start         start time
+     * @param end           end time
+     * @param createdDate   created date
+     * @param createdBy     user that created appointment
+     * @param lastUpdate    last update for appointment. should be the same as created for Insert
      * @param lastUpdatedBy same as created for insert
-     * @param customerID customer ID
-     * @param userID user ID
-     * @param contactID Contact ID
+     * @param customerID    customer ID
+     * @param userID        user ID
+     * @param contactID     Contact ID
      * @throws SQLException .
      */
     public static void insert(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, LocalDateTime createdDate,
-                              String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID ) throws SQLException {
+                              String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID) throws SQLException {
 
         String sql = "INSERT INTO APPOINTMENTS (Title, Description, Location, Type, Start , End, Create_Date, Created_By, " +
                 " Last_Update, Last_Updated_BY, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ? ,? ,? , ?, ?, ?, ? )";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, title);
         ps.setString(2, description);
-        ps.setString(3,location);
-        ps.setString(4,type);
+        ps.setString(3, location);
+        ps.setString(4, type);
         ps.setTimestamp(5, Timestamp.valueOf(start));
         ps.setTimestamp(6, Timestamp.valueOf(end));
         ps.setString(7, String.valueOf(createdDate));
-        ps.setString(8,createdBy);
+        ps.setString(8, createdBy);
         ps.setString(9, String.valueOf(lastUpdate));
-        ps.setString(10,lastUpdatedBy);
-        ps.setInt(11,customerID);
+        ps.setString(10, lastUpdatedBy);
+        ps.setInt(11, customerID);
         ps.setInt(12, userID);
         ps.setInt(13, contactID);
 
@@ -99,6 +95,7 @@ public class AppointmentsDB {
 
     /**
      * deletes selected item from Database
+     *
      * @param appointmentID selected appointment's id
      * @throws SQLException
      */
@@ -111,43 +108,45 @@ public class AppointmentsDB {
 
     /**
      * updates the selected appointment
+     *
      * @param appointmentId appointment id
-     * @param title title
-     * @param description description
-     * @param location location
-     * @param type type
-     * @param start start time
-     * @param end end time
-     * @param lastUpdate last updated time
+     * @param title         title
+     * @param description   description
+     * @param location      location
+     * @param type          type
+     * @param start         start time
+     * @param end           end time
+     * @param lastUpdate    last updated time
      * @param lastUpdatedBy updated by
-     * @param customerId customer id
-     * @param userId user id
-     * @param contactId contact id.
+     * @param customerId    customer id
+     * @param userId        user id
+     * @param contactId     contact id.
      * @throws SQLException
      */
-    public static void updateAppointment( int appointmentId, String title, String description,String location, String type, LocalDateTime start,
-                                          LocalDateTime end, LocalDateTime lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) throws SQLException {
+    public static void updateAppointment(int appointmentId, String title, String description, String location, String type, LocalDateTime start,
+                                         LocalDateTime end, LocalDateTime lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) throws SQLException {
         String sql = "UPDATE APPOINTMENTS SET Title = ?, Description = ?, Location = ? , Type = ?, Start = ?, End = ?, " +
                 "Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, title);
         ps.setString(2, description);
-        ps.setString(3,location);
-        ps.setString(4,type);
+        ps.setString(3, location);
+        ps.setString(4, type);
         ps.setTimestamp(5, Timestamp.valueOf(start));
         ps.setTimestamp(6, Timestamp.valueOf(end));
-        ps.setString(7,String.valueOf(lastUpdate) );
-        ps.setString(8,lastUpdatedBy);
-        ps.setInt(9,customerId);
-        ps.setInt(10,userId);
-        ps.setInt(11,contactId);
-        ps.setInt(12,appointmentId);
+        ps.setString(7, String.valueOf(lastUpdate));
+        ps.setString(8, lastUpdatedBy);
+        ps.setInt(9, customerId);
+        ps.setInt(10, userId);
+        ps.setInt(11, contactId);
+        ps.setInt(12, appointmentId);
 
         ps.executeUpdate();
     }
 
     /**
      * returns the highest in use Id number.
+     *
      * @return highest id in use.
      * @throws SQLException
      */
@@ -164,10 +163,11 @@ public class AppointmentsDB {
 
     /**
      * resets Id auto increment counter when deleting items.
+     *
      * @throws SQLException
      */
     public static void resetAutoIncrement() throws SQLException {
-        String sql ="ALTER TABLE APPOINTMENTS AUTO_INCREMENT = 1";
+        String sql = "ALTER TABLE APPOINTMENTS AUTO_INCREMENT = 1";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
         ps.executeUpdate();
@@ -175,6 +175,7 @@ public class AppointmentsDB {
 
     /**
      * checks appointment list to see if selected customer is assigned to an appointment.
+     *
      * @param customerID selcted customer
      * @return true if appointment found with customer id assigned.
      * @throws SQLException
@@ -183,7 +184,7 @@ public class AppointmentsDB {
         boolean hasAppointment = false;
         String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-        ps.setInt(1,customerID);
+        ps.setInt(1, customerID);
         ResultSet resultSet = ps.executeQuery();
 
         if (resultSet.next()) {
@@ -192,46 +193,39 @@ public class AppointmentsDB {
         return hasAppointment;
     }
 
-    public static LocalDate getCustStartDate(int custID) throws SQLException {
-        LocalDate startDate = null;
+    /**
+     * used for appointment overlap
+     *
+     * @param custID   for new/updated appointment
+     * @return list of appointments matching the selected customer on selected day.
+     */
+    public static ObservableList<Appointment> getApptByID(int custID) throws SQLException {
+        ObservableList<Appointment> custAppointmentList = FXCollections.observableArrayList();
+
 
         String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-        ps.setInt(1,custID);
+        ps.setInt(1, custID);
         ResultSet resultSet = ps.executeQuery();
 
-        while (resultSet.next()) {
-             startDate = resultSet.getTimestamp("Start").toLocalDateTime().toLocalDate();
-        }
-        return startDate;
+            while (resultSet.next()) {
+                int appointmentID = resultSet.getInt("Appointment_ID");
+                String title = resultSet.getString("Title");
+                String description = resultSet.getString("Description");
+                String location = resultSet.getString("Location");
+                String type = resultSet.getString("Type");
+                LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
+                int customerID = resultSet.getInt("Customer_ID");
+                int userID = resultSet.getInt("User_ID");
+                int contactID = resultSet.getInt("Contact_ID");
+                String contactName = ContactDB.getContactNameID(contactID);
+
+
+                Appointment appointment = new Appointment(appointmentID, title, description, location, type
+                        , startDate, endDate, customerID, userID, contactID, contactName);
+                custAppointmentList.add(appointment);
+            }
+            return custAppointmentList;
     }
-
-    public static LocalTime getCustStartTime(int custID) throws SQLException {
-        LocalTime startTime = null;
-
-        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
-        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-        ps.setInt(1,custID);
-        ResultSet resultSet = ps.executeQuery();
-
-        while (resultSet.next()) {
-            startTime = resultSet.getTimestamp("Start").toLocalDateTime().toLocalTime();
-        }
-        return startTime;
-    }
-
-    public static LocalTime getCustEndTime(int custID) throws SQLException {
-        LocalTime endTime = null;
-
-        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ? ";
-        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
-        ps.setInt(1,custID);
-        ResultSet resultSet = ps.executeQuery();
-
-        while (resultSet.next()) {
-             endTime = resultSet.getTimestamp("End").toLocalDateTime().toLocalTime();
-        }
-        return endTime;
-    }
-
 }

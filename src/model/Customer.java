@@ -265,7 +265,7 @@ public class Customer {
     public static void updateCustomer(int Index, Customer customer){
         customers.set(Index, customer);
 
-        // return null;
+
     }
 
 }

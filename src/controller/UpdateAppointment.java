@@ -3,6 +3,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -62,13 +63,6 @@ public class UpdateAppointment implements Initializable {
         index = selectedIndex;
     }
 
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-    }
-
     /**
      * saves changes to seleceted appointment and returns to main appointments if successful
      *
@@ -116,11 +110,23 @@ public class UpdateAppointment implements Initializable {
         contactName = String.valueOf(addContact.getValue());
         contactID = ContactDB.getContactId(contactName);
 
-        System.out.println("create alerts for invalid inputs update appointment line 117");
 
-       // if (AppointmentsDB.hasAppointment(customerID)) { setup for overlap. needed later.
+        if (title.isBlank()) {
+            alertSwitch(1);
+        } else if (description.isBlank()) {
+            alertSwitch(2);
+        } else if (location.isBlank()) {
+            alertSwitch(3);
+        } else if (type.isBlank()) {
+            alertSwitch(4);
+        } else if (startDateTime.toString().isBlank()) {
+            alertSwitch(5);
+        } else if (endDateTime.toString().isBlank()) {
+            alertSwitch(6);
+        } else if (contactName.isBlank()) {
+            alertSwitch(7);
+        } else {
 
-      //  } else {
             if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
                 if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
 
@@ -145,7 +151,7 @@ public class UpdateAppointment implements Initializable {
                 }
             }
         }
-    // }
+    }
 
     /**
      * cancels changes and returns to main appointments screen
@@ -166,5 +172,67 @@ public class UpdateAppointment implements Initializable {
         }
     }
 
+    /**
+     *  Alert switch for appointments table
+     * @param alertNumber alert assigned a number.
+     */
+    public void alertSwitch(int alertNumber){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        switch (alertNumber) {
+            case 1:
+                alert.setTitle("Please Enter Title");
+                alert.setHeaderText("Please enter appointment title");
+                alert.show();
+                break;
+            case 2:
+                alert.setTitle("Please Enter Description");
+                alert.setHeaderText("Please enter appointment description");
+                alert.show();
+                break;
+            case 3:
+                alert.setTitle("Please Enter Location");
+                alert.setHeaderText("Please enter appointment location");
+                alert.show();
+                break;
+            case 4:
+                alert.setTitle("Please Enter Type");
+                alert.setHeaderText("Please enter appointment type");
+                alert.show();
+                break;
+            case 5:
+                alert.setTitle("Please select appointment Start Date / Time");
+                alert.setHeaderText("Please select a date and time to start appointment");
+                alert.show();
+                break;
+            case 6:
+                alert.setTitle("Please select appointment End Date / Time");
+                alert.setHeaderText("Please select a date and time to End appointment");
+                alert.show();
+            case 7:
+                alert.setTitle("Please select a Contact");
+                alert.setHeaderText("Please select a contact for the appointment.");
+                alert.show();
 
+            case 8:
+                alert.setTitle("Number Format Exception");
+                alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
+                alert.show();
+                break;
+            case 9:
+                alert.setTitle("Invalid Start or end Time");
+                alert.setHeaderText("Please enter an End time that is after the Start time.");
+                alert.show();
+                break;
+            case 10:
+                alert.setTitle("Invalid Start or end Time");
+                alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
+                alert.show();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+    }
 }

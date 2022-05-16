@@ -10,27 +10,51 @@ import java.sql.SQLException;
 
 public class ContactDB {
 
+    /**
+     * gets contacts from Database.
+     * @return contact name
+     * @throws SQLException
+     */
     public static ObservableList<String> getContactName() throws SQLException {
         ObservableList<String> contactList = FXCollections.observableArrayList();
 
-            String sql = "SELECT * FROM CONTACTS";
-            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        String sql = "SELECT * FROM CONTACTS";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
 
-            ResultSet resultSet = ps.executeQuery();
-            while(resultSet.next()){
-                int contactID = resultSet.getInt("Contact_ID");
-                String contactName = resultSet.getString("Contact_Name");
-                String email =  resultSet.getString("Email");
+        ResultSet resultSet = ps.executeQuery();
+        while(resultSet.next()){
+            int contactID = resultSet.getInt("Contact_ID");
+            String contactName = resultSet.getString("Contact_Name");
+            String email =  resultSet.getString("Email");
 
-                contactList.add(contactName);
-            }
+            contactList.add(contactName);
+        }
 
         return contactList;
     }
 
+    public static String getContactNameID(int Id) throws SQLException {
+        String contactName ="";
+        String sql = "SELECT * FROM CONTACTS WHERE CONTACT_ID = ?";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1, Id);
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+           contactName = resultSet.getString("Contact_Name");
+        }
+        return contactName;
+    }
+
+
+    /**
+     * gets contact id matching contact name
+     * @param contactName selected name
+     * @return contact ID.
+     * @throws SQLException
+     */
     public static int getContactId(String contactName) throws SQLException {
         int contactId = 0;
-        String sql = "SELECT * FROM CoNTACTS WHERE CONTACT_NAME = ?";
+        String sql = "SELECT * FROM CONTACTS WHERE CONTACT_NAME = ?";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ps.setString(1, contactName);

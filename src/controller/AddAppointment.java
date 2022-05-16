@@ -1,16 +1,12 @@
 package controller;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.*;
 
@@ -19,6 +15,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class AddAppointment implements Initializable {
@@ -99,43 +96,55 @@ public class AddAppointment implements Initializable {
         contactID = ContactDB.getContactId(contactName);
 
 
+        if (title.isBlank()) {
+            alertSwitch(1);
+        } else if (description.isBlank()) {
+            alertSwitch(2);
+        } else if (location.isBlank()) {
+            alertSwitch(3);
+        } else if (type.isBlank()) {
+            alertSwitch(4);
+        } else if (startDateTime.toString().isBlank()) {
+            alertSwitch(5);
+        } else if (endDateTime.toString().isBlank()) {
+            alertSwitch(6);
+        } else if (contactName.isBlank()) {
+            alertSwitch(7);
+        } else {
+
+            if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
+                if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
+v                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
+                        alertSwitch( 11);
+                    }
+                    else {
 
 
-        if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
-            if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
-
-                //FIXME!!!!!!!!!!!!!!!!! create alert for input issues. CHANGE TO UTC TO STORE TIMES.
-
-                // converts to UTC to store in DB
-                zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
-                zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
-                startDateTime = zonedStart.toLocalDateTime();
-                endDateTime = zonedEnd.toLocalDateTime();
+                        // converts to UTC to store in DB
+                        zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
+                        zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
+                        startDateTime = zonedStart.toLocalDateTime();
+                        endDateTime = zonedEnd.toLocalDateTime();
 
 
-                Appointment newAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
-                Appointment.addAppointment(newAppt);
-                AppointmentsDB.insert(title, description, location, type, startDateTime, endDateTime, now, userName, now, userName, customerID, userID, contactID);
-                apptAdded = true;
-
-                if (apptAdded) {
-                    Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-                    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    stage.setTitle("Appointments");
-                    stage.setScene(new Scene(root));
-                    stage.show();
+                        Appointment newAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                        Appointment.addAppointment(newAppt);
+                        AppointmentsDB.insert(title, description, location, type, startDateTime, endDateTime, now, userName, now, userName, customerID, userID, contactID);
+                        apptAdded = true;
+                    }
+                    if (apptAdded) {
+                        Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
+                        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                        stage.setTitle("Appointments");
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    }
+                } else {
+                    alertSwitch(9);
                 }
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Start or end Time");
-                alert.setHeaderText("Please enter an End time that is after the Start time.");
-                alert.show();
+                alertSwitch(10);
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Start or end Time");
-            alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
-            alert.show();
         }
     }
 
@@ -145,65 +154,78 @@ public class AddAppointment implements Initializable {
      * @throws IOException
      */
     public void cancelBtnAction(ActionEvent actionEvent) throws IOException {
-        System.out.println("create alert for cancel on add");
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.setTitle("Appointments");
-        stage.setScene(new Scene(root));
-        stage.show();
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Are you sure you want to cancel");
+        confirm.setHeaderText("All changes will be lost. Press ok to cancel and return to main screen");
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setTitle("Appointments");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
     }
 
+    /**
+     *  Alert switch for appointments table
+     * @param alertNumber alert assigned a number.
+     */
+    public void alertSwitch(int alertNumber){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        switch (alertNumber) {
+            case 1:
+                alert.setTitle("Please Enter Title");
+                alert.setHeaderText("Please enter appointment title");
+                alert.show();
+                break;
+            case 2:
+                alert.setTitle("Please Enter Description");
+                alert.setHeaderText("Please enter appointment description");
+                alert.show();
+                break;
+            case 3:
+                alert.setTitle("Please Enter Location");
+                alert.setHeaderText("Please enter appointment location");
+                alert.show();
+                break;
+            case 4:
+                alert.setTitle("Please Enter Type");
+                alert.setHeaderText("Please enter appointment type");
+                alert.show();
+                break;
+            case 5:
+                alert.setTitle("Please select appointment Start Date / Time");
+                alert.setHeaderText("Please select a date and time to start appointment");
+                alert.show();
+                break;
+            case 6:
+                alert.setTitle("Please select appointment End Date / Time");
+                alert.setHeaderText("Please select a date and time to End appointment");
+                alert.show();
+            case 7:
+                alert.setTitle("Please select a Contact");
+                alert.setHeaderText("Please select a contact for the appointment.");
+                alert.show();
 
-}
-/*
-//FIXME!!!!!!!!!!!!!!!!!!!!!!!! create alerts for errors
-   LocalDate compareSDate = AppointmentsDB.getCustStartDate(customerID);
-        LocalTime compareStime = AppointmentsDB.getCustStartTime(customerID);
-        LocalTime compareETime = AppointmentsDB.getCustEndTime(customerID);
-        if (AppointmentsDB.hasAppointment(customerID)) {
-            if (selectedDate.equals(compareSDate)) {
-                if ((startTime.isAfter(compareStime) || startTime.equals(compareStime)) && startTime.isBefore(compareETime)) {
-                    System.out.println("Error adding appointment Overlap 1 create alert for overlap");
-                }
-                else if (endTime.isAfter(compareStime) && (endTime.isBefore(compareETime) || endTime.equals(compareETime))) {
-                    System.out.println("error adding appointment overlap 2 create alert for overlap");
-                }
-                else if ((startTime.equals(compareStime) || startTime.isBefore(compareStime)) && (endTime.equals(compareETime) || endTime.isAfter(compareETime))) {
-                    System.out.println(" error adding appointment overlap 3 create alert for overlap");
-                }
-                else  {
-                        if (Appointment.checkBusinessHours(startDateTime.toLocalTime())) {
-                            if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
-
-                                //FIXME!!!!!!!!!!!!!!!!! create alert for input issues. CHANGE TO UTC TO STORE TIMES.
-                                   Appointment newAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
-                                Appointment.addAppointment(newAppt);
-                                AppointmentsDB.insert(title, description, location, type, startDateTime, endDateTime, now, userName, now, userName, customerID, userID, contactID);
-
-                                apptAdded = true;
-                                if (apptAdded) {
-                                    Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-                                    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                                    stage.setTitle("Appointments");
-                                    stage.setScene(new Scene(root));
-                                    stage.show();
-                                }
-                            } else {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Invalid Start or end Time");
-                                alert.setHeaderText("Please enter an End time that is after the Start time.");
-                                alert.show();
-                            }
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Invalid Start or end Time");
-                            alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
-                            alert.show();
-                        }
-
-                }
-            }
+            case 8:
+                alert.setTitle("Number Format Exception");
+                alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
+                alert.show();
+                break;
+            case 9:
+                alert.setTitle("Invalid Start or end Time");
+                alert.setHeaderText("Please enter an End time that is after the Start time.");
+                alert.show();
+                break;
+            case 10:
+                alert.setTitle("Invalid Start or end Time");
+                alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
+                alert.show();
+            case 11:
+                alert.setTitle("Overlapping appointment");
+                alert.setHeaderText("Customer has overlapping appointments. Please Select different time.");
+                alert.show();
         }
- */
+    }
+}

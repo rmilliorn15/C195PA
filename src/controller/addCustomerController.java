@@ -22,14 +22,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class addCustomerController implements Initializable {
-    public TableView<Customer> customerTable;
-    public TableColumn<Customer, Integer> customerIdcolumn;
-    public TableColumn<Customer, String> nameColumn;
-    public TableColumn<Customer, String> streetColumn;
-    public TableColumn<Customer, String> cityStateColumn;
-    public TableColumn<Customer, String> countryColumn;
-    public TableColumn<Customer, String> zipColumn;
-    public TableColumn<Customer, String> phoneColumn;
+
     public TextField customerName;
     public TextField customerPhone;
     public TextField customerStreet;

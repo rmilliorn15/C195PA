@@ -6,6 +6,12 @@ public class Contact {
     private static String contactName;
     private static String email;
 
+    /**
+     * creates new contact object.
+      * @param contactID id
+     * @param contactName name
+     * @param email email.
+     */
     public Contact(int contactID, String contactName, String email) {
         this.contactID = contactID;
         this.contactName = contactName;

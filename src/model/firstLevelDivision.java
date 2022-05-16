@@ -9,6 +9,7 @@ public class firstLevelDivision {
     private int countryID;
 
     private static ObservableList<firstLevelDivision> getAllDivisions = FXCollections.observableArrayList();
+
     /**
      * created new division object.
      *
@@ -52,7 +53,7 @@ public class firstLevelDivision {
     /**
      * setter for Division ID
      *
-     * @param divisionID
+     * @param divisionID .
      */
     public void setDivisionID(int divisionID) {
         this.divisionID = divisionID;
@@ -61,7 +62,7 @@ public class firstLevelDivision {
     /**
      * setter for countryID
      *
-     * @param countryID
+     * @param countryID .
      */
     public void setCountryID(int countryID) {
         this.countryID = countryID;
@@ -70,12 +71,16 @@ public class firstLevelDivision {
     /**
      * setter for Division Name
      *
-     * @param divisionName
+     * @param divisionName .
      */
     public void setDivisionName(String divisionName) {
         this.divisionName = divisionName;
     }
 
+    /**
+     * returns first level divisions
+     * @return first level divisions.
+     */
     public static ObservableList<firstLevelDivision> getGetAllDivisions() {
         return getAllDivisions;
     }

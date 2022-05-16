@@ -4,9 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 
 public class Appointment {
 
@@ -287,6 +287,38 @@ public class Appointment {
 
     }
 
+    /**
+     * checks for appointment overlap
+     * @param custID customer id
+     * @param newDate new appointment date
+     * @param newStart new start time
+     * @param newEnd new end time
+     * @return true if appointment overlap.
+     * @throws SQLException
+     */
+    public static boolean checkOverlap(int custID, LocalDate newDate, LocalTime newStart, LocalTime newEnd) throws SQLException {
+        ObservableList<Appointment> custAppts = AppointmentsDB.getApptByID(custID);
+        boolean overlap = false;
+        LocalDate startDate;
+        LocalTime apptStime;
+        LocalTime apptEtime;
+        for (int i = 0;i < custAppts.size(); i++){
+             Appointment appt = custAppts.get(i);
+            startDate = appt.getStartTime().toLocalDateTime().toLocalDate();
+            if (startDate.equals(newDate)){
+                apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
+                apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
+                if((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)){
+                    overlap = true;
+                } else if (newEnd.isAfter(apptStime) && (newStart.isBefore(apptEtime) || newEnd.equals(apptEtime))) {
+                    overlap = true;
+                } else if ((newStart.isBefore(apptStime) || newStart.equals(apptStime)) && ( newEnd.isAfter(apptEtime) || newEnd.equals(apptEtime))) {
+                    overlap = true;
+                }
+            }
+        }
+        return overlap;
+    }
 
 }
 

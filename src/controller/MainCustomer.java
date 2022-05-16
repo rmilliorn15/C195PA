@@ -30,23 +30,7 @@ public class MainCustomer implements Initializable {
     public TableColumn<Customer, String> phoneColumn;
     public TextField custSearch;
 
-    /**
-     * loads screen and populates customer table from DB
-     * @param url .
-     * @param resourceBundle .
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        customerTable.setItems(Customer.getAllCustomers());
-        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        streetColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        cityStateColumn.setCellValueFactory(new PropertyValueFactory<>("customerDivision"));
-        zipColumn.setCellValueFactory(new PropertyValueFactory<>("zipCode"));
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        countryColumn.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
-    }
 
     /**
      * opens add customer screen.
@@ -181,5 +165,23 @@ public class MainCustomer implements Initializable {
         stage.setTitle("View Customers");
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    /**
+     * loads screen and populates customer table from DB
+     * @param url .
+     * @param resourceBundle .
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        customerTable.setItems(Customer.getAllCustomers());
+        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        streetColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        cityStateColumn.setCellValueFactory(new PropertyValueFactory<>("customerDivision"));
+        zipColumn.setCellValueFactory(new PropertyValueFactory<>("zipCode"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("customerCountry"));
     }
 }

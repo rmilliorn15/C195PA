@@ -50,9 +50,6 @@ public class LoginScreenController implements Initializable {
      * @param actionEvent exit button clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-
-        System.out.println("appointments created need to populate table and create getters for appointments.");
-
         if (userLocale.getCountry().equals("FR")) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Êtes-vous sûr de vouloir quitter?");
@@ -99,9 +96,6 @@ public class LoginScreenController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
             alert.showAndWait();
         }
-
-
-
     }
 
     /**

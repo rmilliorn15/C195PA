@@ -1,23 +1,15 @@
 package controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import model.Appointment;
-import model.loginToDB;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class ScreenSelector implements Initializable {
@@ -55,12 +47,9 @@ public class ScreenSelector implements Initializable {
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println("************ need to figure out the time change parts. ");
+        System.out.println("Need to add overlap to update appointment page \n work on reports for 3Af \n Lambda expressions. \n Login records. ");
         System.exit(0);
     }
-
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
