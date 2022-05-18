@@ -114,7 +114,7 @@ public class AddAppointment implements Initializable {
 
             if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
                 if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
-v                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
+                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
                         alertSwitch( 11);
                     }
                     else {

@@ -4,10 +4,11 @@ import helper.JDBC;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.*;
-import java.time.LocalDate;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class AppointmentsDB {
 
@@ -208,24 +209,89 @@ public class AppointmentsDB {
         ps.setInt(1, custID);
         ResultSet resultSet = ps.executeQuery();
 
-            while (resultSet.next()) {
-                int appointmentID = resultSet.getInt("Appointment_ID");
-                String title = resultSet.getString("Title");
-                String description = resultSet.getString("Description");
-                String location = resultSet.getString("Location");
-                String type = resultSet.getString("Type");
-                LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
-                int customerID = resultSet.getInt("Customer_ID");
-                int userID = resultSet.getInt("User_ID");
-                int contactID = resultSet.getInt("Contact_ID");
-                String contactName = ContactDB.getContactNameID(contactID);
+        while (resultSet.next()) {
+            int appointmentID = resultSet.getInt("Appointment_ID");
+            String title = resultSet.getString("Title");
+            String description = resultSet.getString("Description");
+            String location = resultSet.getString("Location");
+            String type = resultSet.getString("Type");
+            LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
+            int customerID = resultSet.getInt("Customer_ID");
+            int userID = resultSet.getInt("User_ID");
+            int contactID = resultSet.getInt("Contact_ID");
+            String contactName = ContactDB.getContactNameID(contactID);
 
 
-                Appointment appointment = new Appointment(appointmentID, title, description, location, type
-                        , startDate, endDate, customerID, userID, contactID, contactName);
-                custAppointmentList.add(appointment);
-            }
-            return custAppointmentList;
+            Appointment appointment = new Appointment(appointmentID, title, description, location, type
+                    , startDate, endDate, customerID, userID, contactID, contactName);
+            custAppointmentList.add(appointment);
+        }
+        return custAppointmentList;
+    }
+
+    /**
+     * gets list of appointments assigned to contact fro DB
+     * @param contact selected contact
+     * @return list of contact appointments.
+     * @throws SQLException
+     */
+    public static ObservableList<Appointment> getApptByContact(int contact) throws SQLException {
+        ObservableList<Appointment> contactAppointmentList = FXCollections.observableArrayList();
+
+
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Contact_ID = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setInt(1, contact);
+        ResultSet resultSet = ps.executeQuery();
+
+        while (resultSet.next()) {
+            int appointmentID = resultSet.getInt("Appointment_ID");
+            String title = resultSet.getString("Title");
+            String description = resultSet.getString("Description");
+            String location = resultSet.getString("Location");
+            String type = resultSet.getString("Type");
+            LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
+            int customerID = resultSet.getInt("Customer_ID");
+            int userID = resultSet.getInt("User_ID");
+            int contactID = resultSet.getInt("Contact_ID");
+            String contactName = ContactDB.getContactNameID(contactID);
+
+
+            Appointment appointment = new Appointment(appointmentID, title, description, location, type
+                    , startDate, endDate, customerID, userID, contactID, contactName);
+            contactAppointmentList.add(appointment);
+        }
+        return contactAppointmentList;
+    }
+
+    public static ObservableList<Appointment> getApptByType(String inputType) throws SQLException {
+        ObservableList<Appointment> typeAppointmentList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Type = ?";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setString( 1, inputType);
+
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            int appointmentID = resultSet.getInt("Appointment_ID");
+            String title = resultSet.getString("Title");
+            String description = resultSet.getString("Description");
+            String location = resultSet.getString("Location");
+            String type = resultSet.getString("Type");
+            LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
+            int customerID = resultSet.getInt("Customer_ID");
+            int userID = resultSet.getInt("User_ID");
+            int contactID = resultSet.getInt("Contact_ID");
+            String contactName = ContactDB.getContactNameID(contactID);
+
+
+            Appointment appointment = new Appointment(appointmentID, title, description, location, type
+                    , startDate, endDate, customerID, userID, contactID, contactName);
+            typeAppointmentList.add(appointment);
+        }
+
+        return typeAppointmentList;
     }
 }

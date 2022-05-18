@@ -12,8 +12,9 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="83.0" layoutY="157.0" mnemonicParsing="false" onAction="#customerBtnAction" prefHeight="106.0" prefWidth="155.0" text="Customers" />
-      <Button layoutX="356.0" layoutY="157.0" mnemonicParsing="false" onAction="#appointmentsBtnAction" prefHeight="106.0" prefWidth="155.0" text="Appointments" />
+      <Button layoutX="30.0" layoutY="157.0" mnemonicParsing="false" onAction="#customerBtnAction" prefHeight="106.0" prefWidth="155.0" text="Customers" />
+      <Button layoutX="223.0" layoutY="157.0" mnemonicParsing="false" onAction="#appointmentsBtnAction" prefHeight="106.0" prefWidth="155.0" text="Appointments" />
       <Button layoutX="274.0" layoutY="330.0" mnemonicParsing="false" onAction="#exitBtnAction" prefHeight="38.0" prefWidth="61.0" text="Exit" />
+      <Button layoutX="411.0" layoutY="157.0" mnemonicParsing="false" onAction="#reportsBtnAction" prefHeight="106.0" prefWidth="155.0" text="Reports" />
    </children>
 </AnchorPane>

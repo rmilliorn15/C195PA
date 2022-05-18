@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class ContactDB {
 
-    /**
+ /**
      * gets contacts from Database.
      * @return contact name
      * @throws SQLException
@@ -23,9 +23,8 @@ public class ContactDB {
 
         ResultSet resultSet = ps.executeQuery();
         while(resultSet.next()){
-            int contactID = resultSet.getInt("Contact_ID");
+
             String contactName = resultSet.getString("Contact_Name");
-            String email =  resultSet.getString("Email");
 
             contactList.add(contactName);
         }
@@ -40,7 +39,7 @@ public class ContactDB {
         ps.setInt(1, Id);
         ResultSet resultSet = ps.executeQuery();
         while (resultSet.next()) {
-           contactName = resultSet.getString("Contact_Name");
+            contactName = resultSet.getString("Contact_Name");
         }
         return contactName;
     }

@@ -54,7 +54,7 @@ public class MainAppointments implements Initializable {
      * opens update appointment page
      * @param actionEvent update button clicked.
      */
-    public void updateBtnAction(ActionEvent actionEvent) {
+    public void updateBtnAction(ActionEvent actionEvent) throws SQLException {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/view/updateAppointment.fxml"));
@@ -70,14 +70,13 @@ public class MainAppointments implements Initializable {
             stage.setTitle("Update Appointment");
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (NullPointerException | IOException e){
-            e.printStackTrace();
+        } catch (NullPointerException e){
             Alert error = new Alert(Alert.AlertType.ERROR);
             error.setHeaderText("Invalid selection");
             error.setContentText("Please select appointment to update.");
             error.show();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -95,7 +94,7 @@ public class MainAppointments implements Initializable {
         } else {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setHeaderText("Delete Appointment?");
-            confirm.setContentText("Are you sure you want to delete Appointment " + deleteAppointment.getAppointmentID() + "?");
+            confirm.setContentText("Are you sure you want to delete Appointment " + deleteAppointment.getAppointmentID() + deleteAppointment.getType() + " Proceed?");
             Optional<ButtonType> result = confirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 int deleteAppointmentId = deleteAppointment.getAppointmentID();

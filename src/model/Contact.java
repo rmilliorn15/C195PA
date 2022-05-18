@@ -1,10 +1,19 @@
 package model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.SQLException;
+
 public class Contact {
 
     private static int contactID;
     private static String contactName;
     private static String email;
+
+
+
+
 
     /**
      * creates new contact object.
@@ -22,7 +31,7 @@ public class Contact {
      * getter for contact Id
      * @return ID
      */
-    public static int getID(String contactName) {
+    public static int getID() {
         return contactID;
     }
 
@@ -41,4 +50,5 @@ public class Contact {
     public String getEmail() {
         return email;
     }
+
 }

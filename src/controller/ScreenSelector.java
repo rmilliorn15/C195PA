@@ -47,9 +47,20 @@ public class ScreenSelector implements Initializable {
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println("Need to add overlap to update appointment page \n work on reports for 3Af \n Lambda expressions. \n Login records. ");
+        System.out.println(" Need customer report and report for by type and date \n Lambda expressions. \n JavaDocs & README and then submit. ");
         System.exit(0);
     }
+
+    public void reportsBtnAction(ActionEvent actionEvent) throws IOException {
+
+        Parent root = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.setTitle("Reports");
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,4 +68,7 @@ public class ScreenSelector implements Initializable {
 
 
     }
+
+
+
 }

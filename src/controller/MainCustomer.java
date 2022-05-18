@@ -17,6 +17,7 @@ import model.CustomerDB;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainCustomer implements Initializable {
@@ -102,13 +103,19 @@ public class MainCustomer implements Initializable {
                         + deleteCustomer.getName() +" and try again.");
                 warning.showAndWait();
             } else {
-                Alert inform = new Alert(Alert.AlertType.INFORMATION);
-                inform.setHeaderText("Customer " + deleteCustomer.getName() + " Deleted");
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setContentText("Are you sure you want to delete " + deleteCustomer.getName());
+                Optional<ButtonType> result = confirm.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
 
-                CustomerDB.deleteSelectedCustomer(deleteCustomerId);
-                CustomerDB.resetAutoIncrement();
-                Customer.removeCustomer(deleteCustomer);
-                inform.show();
+                    Alert inform = new Alert(Alert.AlertType.INFORMATION);
+                    inform.setHeaderText("Customer " + deleteCustomer.getName() + " Deleted");
+
+                    CustomerDB.deleteSelectedCustomer(deleteCustomerId);
+                    CustomerDB.resetAutoIncrement();
+                    Customer.removeCustomer(deleteCustomer);
+                    inform.show();
+                }
             }
         }
     }

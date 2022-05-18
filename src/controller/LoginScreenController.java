@@ -12,10 +12,14 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.loginToDB;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.ZoneId;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -83,6 +87,14 @@ public class LoginScreenController implements Initializable {
         String userName = userNameField.getText();//gets input username
         String password = passwordField.getText();//gets input password
         loginSuccessful = loginToDB.loggedIn(userName,password);
+        String fileName = "login_activity.txt";
+        ZonedDateTime zonedNow = ZonedDateTime.now(loginToDB.getUserZoneID());
+        zonedNow = zonedNow.withZoneSameInstant(ZoneOffset.UTC);
+        LocalDateTime now = zonedNow.toLocalDateTime();
+
+        FileWriter fWriter = new FileWriter( fileName, true);
+        PrintWriter outputFile = new PrintWriter(fWriter);
+
 
         if(loginSuccessful) {
             Parent root = FXMLLoader.load(getClass().getResource("/view/screenSelector.fxml"));
@@ -91,11 +103,14 @@ public class LoginScreenController implements Initializable {
             stage.setScene(new Scene(root));
             stage.show();
             Appointment.nextAppt();
+            outputFile.println(userName+ " Login Successful  at " + now +  "UTC");
         }
         else {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Invaild User Name or Password.");
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid User Name or Password.");
             alert.showAndWait();
+            outputFile.println(userName + " Login unsuccessful  at " + now +  "UTC");
         }
+        outputFile.close();
     }
 
     /**

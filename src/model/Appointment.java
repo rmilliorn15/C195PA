@@ -302,20 +302,24 @@ public class Appointment {
         LocalDate startDate;
         LocalTime apptStime;
         LocalTime apptEtime;
-        for (int i = 0;i < custAppts.size(); i++){
-             Appointment appt = custAppts.get(i);
+        for (int i = 0;i < custAppts.size(); i++) {
+            Appointment appt = custAppts.get(i);
             startDate = appt.getStartTime().toLocalDateTime().toLocalDate();
-            if (startDate.equals(newDate)){
-                apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
-                apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
-                if((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)){
-                    overlap = true;
-                } else if (newEnd.isAfter(apptStime) && (newStart.isBefore(apptEtime) || newEnd.equals(apptEtime))) {
-                    overlap = true;
-                } else if ((newStart.isBefore(apptStime) || newStart.equals(apptStime)) && ( newEnd.isAfter(apptEtime) || newEnd.equals(apptEtime))) {
-                    overlap = true;
+           if( custID == appt.getAppointmentID()){
+               return false;
+           }
+                if (startDate.equals(newDate)) {
+                    apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
+                    apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
+                    if ((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)) {
+                        overlap = true;
+                    } else if (newEnd.isAfter(apptStime) && (newStart.isBefore(apptEtime) || newEnd.equals(apptEtime))) {
+                        overlap = true;
+                    } else if ((newStart.isBefore(apptStime) || newStart.equals(apptStime)) && (newEnd.isAfter(apptEtime) || newEnd.equals(apptEtime))) {
+                        overlap = true;
+                    }
                 }
-            }
+
         }
         return overlap;
     }

@@ -129,26 +129,37 @@ public class UpdateAppointment implements Initializable {
 
             if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
                 if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
+                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
+                        alertSwitch( 11);
+                    }
+                    else {
 
-                    zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
-                    zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
-                    startDateTime = zonedStart.toLocalDateTime();
-                    endDateTime = zonedEnd.toLocalDateTime();
+
+                        // converts to UTC to store in DB
+                        zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
+                        zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
+                        startDateTime = zonedStart.toLocalDateTime();
+                        endDateTime = zonedEnd.toLocalDateTime();
 
 
-                    Appointment updateAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
-                    Appointment.updateAppointment(index, updateAppt);
-                    AppointmentsDB.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, now, userName, customerID, userID, contactID);
-                    apptAdded = true;
 
+                        Appointment updateAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
+                        Appointment.updateAppointment(index, updateAppt);
+                        AppointmentsDB.updateAppointment(id, title, description, location, type, startDateTime, endDateTime, now, userName, customerID, userID, contactID);
+                        apptAdded = true;
+                    }
                     if (apptAdded) {
                         Parent root = FXMLLoader.load(getClass().getResource("/view/mainAppointments.fxml"));
-                        Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+                        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                         stage.setTitle("Appointments");
                         stage.setScene(new Scene(root));
                         stage.show();
                     }
+                } else {
+                    alertSwitch(9);
                 }
+            } else {
+                alertSwitch(10);
             }
         }
     }
@@ -226,6 +237,10 @@ public class UpdateAppointment implements Initializable {
             case 10:
                 alert.setTitle("Invalid Start or end Time");
                 alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
+                alert.show();
+            case 11:
+                alert.setTitle("Overlapping appointment");
+                alert.setHeaderText("Customer has overlapping appointments. Please Select different time.");
                 alert.show();
         }
     }
