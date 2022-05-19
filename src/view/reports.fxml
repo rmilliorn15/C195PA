@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="558.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
    <children>
@@ -35,19 +36,53 @@
                   </AnchorPane>
             </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Total Appointments in Month">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ComboBox fx:id="monthComboBox2" layoutX="295.0" layoutY="82.0" onAction="#monthCount" prefWidth="150.0" />
+                        <Label layoutX="57.0" layoutY="147.0" prefHeight="35.0" prefWidth="571.0" text="The Total Number of Appointments in the month of ">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="monthLabel" layoutX="628.0" layoutY="147.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="numberApptsMonth" layoutX="356.0" layoutY="223.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="172.0" layoutY="81.0" text="Select Month">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
             </content>
           </Tab>
-            <Tab text="Untitled Tab 1">
+            <Tab text="Appointments By Type">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ComboBox fx:id="monthComboBox" layoutX="159.0" layoutY="40.0" onAction="#appointmentsMonth" prefWidth="150.0" />
-                        <ComboBox fx:id="typeComboBox" layoutX="462.0" layoutY="40.0" onAction="#appointmentsType" prefWidth="150.0" />
-                        <Label layoutX="79.0" layoutY="44.0" text="Select Month" />
-                        <Label layoutX="344.0" layoutY="44.0" text="Appointment type" />
+                        <ComboBox fx:id="monthComboBox" layoutX="460.0" layoutY="40.0" onAction="#appointmentsMonth" prefWidth="150.0" />
+                        <ComboBox fx:id="typeComboBox" disable="false" layoutX="172.0" layoutY="40.0" onAction="#appointmentsType" prefWidth="150.0" />
+                        <Label layoutX="363.0" layoutY="44.0" text="Select Month" />
+                        <Label layoutX="57.0" layoutY="44.0" text="Appointment type" />
+                        <Label layoutX="143.0" layoutY="158.0" prefHeight="27.0" prefWidth="488.0" text="Appointments of selected type during selected month :">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="appointmentNumber" layoutX="322.0" layoutY="212.0" prefHeight="57.0" prefWidth="153.0">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="337.0" layoutY="105.0" mnemonicParsing="false" onAction="#searchBtnAction" text="Search" />
                      </children>
                   </AnchorPane>
                </content>

@@ -24,7 +24,7 @@ public class Customer {
 
     /**
      *
-     * constructor for customer object.
+     * Constructor for customer object.
      * @param id customer Id
      * @param name Customer Name
      * @param address Customer Address
@@ -47,7 +47,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer ID
+     * Getter for customer ID
      * @return customer ID
      */
     public int getId() {
@@ -55,7 +55,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer name
+     * Getter for customer name
      * @return customer name
      */
     public String getName() {
@@ -63,7 +63,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer address
+     * Getter for customer address
      * @return customer address
      */
     public String getAddress() {
@@ -71,7 +71,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer country
+     * Getter for customer country
      * @return customer country
      */
     public String getCountry() {
@@ -79,7 +79,7 @@ public class Customer {
     }
 
     /**
-     * getter for first level division
+     * Getter for first level division
      * @return customer division
      */
     public String getCustomerDivision() {
@@ -87,7 +87,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer Phone number
+     * Getter for customer Phone number
      * @return string containing phone number
      */
     public String getPhoneNumber() {
@@ -95,7 +95,7 @@ public class Customer {
     }
 
     /**
-     * getter for customer zip/Postal code
+     * Getter for customer zip/Postal code
      * @return customer postal code
      */
     public String getZipCode() {
@@ -103,7 +103,7 @@ public class Customer {
     }
 
     /**
-     * setter for country
+     * Setter for country
      * @param country
      */
     public void setCountry(String country) {
@@ -111,7 +111,7 @@ public class Customer {
     }
 
     /**
-     * getter for country
+     * Getter for country
      * @return customer country
      *
      */
@@ -120,7 +120,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer address
+     *Setter for customer address
      * @param address
      */
     public void setAddress(String address) {
@@ -128,7 +128,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer division.
+     *Setter for customer division.
      * @param customerDivision
      */
     public void setCustomerDivision(String customerDivision) {
@@ -136,7 +136,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer ID
+     * Setter for customer ID
      * @param id
      */
     public void setId(int id) {
@@ -144,7 +144,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer Name
+     * Setter for customer Name
      * @param name
      */
     public void setName(String name) {
@@ -152,7 +152,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer phone number
+     * Setter for customer phone number
      * @param phoneNumber
      */
     public void setPhoneNumber(String phoneNumber) {
@@ -160,7 +160,7 @@ public class Customer {
     }
 
     /**
-     * setter for customer Zipcode
+     * Setter for customer Zipcode
      * @param zipCode
      */
     public void setZipCode(String zipCode) {
@@ -168,7 +168,7 @@ public class Customer {
     }
 
     /**
-     * setter for division ID
+     * Setter for division ID
      * @param divisionID
      */
     public void setDivisionID(int divisionID) {
@@ -176,7 +176,7 @@ public class Customer {
     }
 
     /**
-     * getter for division
+     * Getter for division
      * @return division ID
      */
     public int getDivisionID() {
@@ -184,7 +184,7 @@ public class Customer {
     }
 
     /**
-     * setter for cust country.
+     * Setter for cust country.
      * @param customerCountry
      */
     public void setCustomercountry(String customerCountry) {
@@ -192,7 +192,7 @@ public class Customer {
     }
 
     /**
-     * getter for country
+     * Getter for country
      * @return customer country.
      */
     public String getCustomercountry() {
@@ -200,7 +200,7 @@ public class Customer {
     }
 
     /**
-     * adds customer to customer array List
+     * Adds customer to customer array List
      * @param newCustomer
      */
     public static void addCustomers(Customer newCustomer){
@@ -208,7 +208,7 @@ public class Customer {
     }
 
     /**
-     * removes customer from customer array list.
+     * Removes customer from customer array list.
      * @param selectedCustomer
      */
     public static void removeCustomer(Customer selectedCustomer){
@@ -216,7 +216,7 @@ public class Customer {
     }
 
     /**
-     * shows list of all customers in system currently
+     * Shows list of all customers in system currently
      * @return customer list array
      *
      */
@@ -225,14 +225,12 @@ public class Customer {
     }
 
     /**
-     * used for searching customer by ID.
+     * Used for searching customer by ID.
      * @param Id customer ID number
      * @return matching customer
      */
     public static Customer lookupCustomer(int Id) {
-        for(int i = 0; i < customers.size(); i++) {
-            Customer searchCust = customers.get(i);
-
+        for (Customer searchCust : customers) {
             if (searchCust.getId() == Id) {
                 return searchCust;
             }
@@ -241,7 +239,7 @@ public class Customer {
     }
 
     /**
-     * searches customer by name.
+     * Searches customer by name.
      * @param partialName text being compared to existing items.
      * @return matching customers
      */
@@ -257,10 +255,9 @@ public class Customer {
     }
 
     /**
-     * used to update the tableview displaying current customer information
+     * Used to update the tableview displaying current customer information
      * @param Index sent from main customer page when selected.
      * @param customer the new customer info being entered.
-     * @return
      */
     public static void updateCustomer(int Index, Customer customer){
         customers.set(Index, customer);

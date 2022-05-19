@@ -12,7 +12,7 @@ public class UserDB {
 
 
     /**
-     * gets users from database
+     * Gets users from database
      * @return users
      */
     public static ObservableList<User> getAllUsers(){

@@ -9,7 +9,7 @@ public class User {
 
 
     /**
-     * user constructor
+     * User constructor
      * @param userName
      * @param userId
      */
@@ -19,7 +19,7 @@ public class User {
     }
 
     /**
-     * getter for User ID
+     * Getter for User ID
      * @return User ID
      */
     public static int getUserId() {
@@ -27,7 +27,7 @@ public class User {
     }
 
     /**
-     * getter for User Name
+     * Getter for User Name
      * @return user Name
      */
     public static String getUserName() {
@@ -35,7 +35,7 @@ public class User {
     }
 
     /**
-     * setter for userID
+     * Setter for userID
      * @param userId
      */
     public void setUserId(int userId) {
@@ -44,7 +44,7 @@ public class User {
 
 
     /**
-     * setter for user name
+     * Setter for user name
      * @param userName
      */
     public void setUserName(String userName) {

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class AppointmentsDB {
 
     /**
-     * connects to database and gets all appointments.
+     * Connects to database and gets all appointments.
      *
      * @return all appointments.
      */
@@ -53,7 +53,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * adds new appointment to database.
+     * Adds new appointment to database.
      *
      * @param title         title
      * @param description   description
@@ -95,7 +95,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * deletes selected item from Database
+     * Deletes selected item from Database
      *
      * @param appointmentID selected appointment's id
      * @throws SQLException
@@ -108,7 +108,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * updates the selected appointment
+     * Updates the selected appointment
      *
      * @param appointmentId appointment id
      * @param title         title
@@ -146,7 +146,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * returns the highest in use Id number.
+     * Returns the highest in use Id number from DB
      *
      * @return highest id in use.
      * @throws SQLException
@@ -163,7 +163,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * resets Id auto increment counter when deleting items.
+     * Resets Id auto increment counter when deleting items.
      *
      * @throws SQLException
      */
@@ -175,7 +175,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * checks appointment list to see if selected customer is assigned to an appointment.
+     * Checks appointment list to see if selected customer is assigned to an appointment.
      *
      * @param customerID selcted customer
      * @return true if appointment found with customer id assigned.
@@ -195,7 +195,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * used for appointment overlap
+     * Used for appointment overlap
      *
      * @param custID   for new/updated appointment
      * @return list of appointments matching the selected customer on selected day.
@@ -231,7 +231,7 @@ public class AppointmentsDB {
     }
 
     /**
-     * gets list of appointments assigned to contact fro DB
+     * Gets list of appointments assigned to contact from DB
      * @param contact selected contact
      * @return list of contact appointments.
      * @throws SQLException
@@ -266,11 +266,57 @@ public class AppointmentsDB {
         return contactAppointmentList;
     }
 
-    public static ObservableList<Appointment> getApptByType(String inputType) throws SQLException {
+    /**
+     * Gets all appointment types
+     * @return appointment type list
+     * @throws SQLException
+     */
+    public static ObservableList<String> getAllApptType() throws SQLException {
+        ObservableList<String> typeAppointmentList = FXCollections.observableArrayList();
+        String sql = "SELECT DISTINCT * FROM APPOINTMENTS";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+
+            String type = resultSet.getString("Type");
+            typeAppointmentList.add(type);
+        }
+
+        return typeAppointmentList;
+    }
+
+    /**
+     * Gets month name from appointments
+     * @return Months that have an appointment.
+     * @throws SQLException
+     */
+    public static ObservableList<String> getApptMonths() throws SQLException {
+        ObservableList<String> apptMonth = FXCollections.observableArrayList();
+
+        String sql = "SELECT DISTINCT MONTHNAME(START) AS NAME FROM APPOINTMENTS";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            String month =resultSet.getString("NAME");
+            apptMonth.add(month);
+        }
+        return apptMonth;
+    }
+
+    /**
+     * Gets appointments matching the selected type.
+     * @param inputType selected type
+     * @return number of appointments with that type
+     * @throws SQLException
+     */
+    public static ObservableList<Appointment> getApptByType(String inputType, String inputMonth) throws SQLException {
         ObservableList<Appointment> typeAppointmentList = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM APPOINTMENTS WHERE Type = ?";
+        String sql = "SELECT * FROM APPOINTMENTS WHERE Type = ? AND MONTHNAME(START) = ? ";
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
         ps.setString( 1, inputType);
+        ps.setString(2,inputMonth);
 
         ResultSet resultSet = ps.executeQuery();
         while (resultSet.next()) {
@@ -294,4 +340,41 @@ public class AppointmentsDB {
 
         return typeAppointmentList;
     }
+
+    /**
+     * Gets the number of appointments by month
+     * @param inputMonth selected month
+     * @return number of appointments that month
+     * @throws SQLException
+     */
+    public static ObservableList<Appointment> getApptByMonth(String inputMonth) throws SQLException {
+        ObservableList<Appointment> monthAppointmentList = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM APPOINTMENTS WHERE MONTHNAME(START) = ? ";
+        PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+        ps.setString(1,inputMonth);
+
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            int appointmentID = resultSet.getInt("Appointment_ID");
+            String title = resultSet.getString("Title");
+            String description = resultSet.getString("Description");
+            String location = resultSet.getString("Location");
+            String type = resultSet.getString("Type");
+            LocalDateTime startDate = resultSet.getTimestamp("Start").toLocalDateTime();
+            LocalDateTime endDate = resultSet.getTimestamp("End").toLocalDateTime();
+            int customerID = resultSet.getInt("Customer_ID");
+            int userID = resultSet.getInt("User_ID");
+            int contactID = resultSet.getInt("Contact_ID");
+            String contactName = ContactDB.getContactNameID(contactID);
+
+
+            Appointment appointment = new Appointment(appointmentID, title, description, location, type
+                    , startDate, endDate, customerID, userID, contactID, contactName);
+            monthAppointmentList.add(appointment);
+        }
+
+        return monthAppointmentList;
+    }
+
+
 }

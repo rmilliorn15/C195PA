@@ -33,7 +33,7 @@ public class addCustomerController implements Initializable {
 
 
     /**
-     * gets textfields and adds new customer to database.
+     * Gets text fields and adds new customer to database
      * then returns to main screen.
      * @param actionEvent save button clicked.
      */
@@ -97,7 +97,7 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * clears input information from text boxes.
+     * Clears input information from text boxes.
      * @param actionEvent clear button clicked.
      */
     public void clearBtnAction(ActionEvent actionEvent) {
@@ -111,7 +111,7 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * discards changes and returns to main screen.
+     * Discards changes and returns to main screen.
      * @param actionEvent cancel button clicked.
      * @throws IOException .
      */
@@ -130,13 +130,14 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * when country is selected enables state/province selector and populates with info from Database.
+     * When country is selected enables state/province selector and populates with info from Database.
      * @param actionEvent country selected from combo box.
      */
     public void countrySelect(ActionEvent actionEvent) {
 
         customerCityState.setDisable(false);
         try {
+
             customerCityState.setItems(firstLevelDivisionDB.getDivision(customerCountry.getValue()));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -144,48 +145,49 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * switch used for my alerts on the customer table.
+     * Switch used for my alerts on the customer table.
+     * LAMBDA EXPRESSION: takes int and returns appropriate alert text.
      * @param alertNumber int indicating which error
      */
     public void alertSwitch(int alertNumber){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         switch (alertNumber) {
-            case 1:
+            case 1 -> {
                 alert.setTitle("Please Enter Name");
                 alert.setHeaderText("Please enter customer name");
                 alert.show();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 alert.setTitle("Please Enter Address");
                 alert.setHeaderText("Please enter customer address");
                 alert.show();
-                break;
-            case 3:
+            }
+            case 3 -> {
                 alert.setTitle("Please Enter Zip/Postal code");
                 alert.setHeaderText("Please enter customer Zip or postal code");
                 alert.show();
-                break;
-            case 4:
+            }
+            case 4 -> {
                 alert.setTitle("Please Enter Phone Number");
                 alert.setHeaderText("Please enter customer Phone Number");
                 alert.show();
-                break;
-            case 5:
+            }
+            case 5 -> {
                 alert.setTitle("Please select customer state/province");
                 alert.setHeaderText("Please select a state or province.");
                 alert.show();
-                break;
-            case 6:
+            }
+            case 6 -> {
                 alert.setTitle("Number Format Exception");
                 alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
                 alert.show();
-                break;
+            }
         }
     }
 
 
     /**
-     * sets comboboxes when loaded.
+     * Sets combo boxes when loaded.
      * @param url .
      * @param resourceBundle .
      */
@@ -193,19 +195,14 @@ public class addCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             customerId.setText(String.valueOf(CustomerDB.getMaxID() + 1));
+
+            customerCountry.setItems(firstLevelDivisionDB.getCountries());
+
+            if (customerCountry.getSelectionModel().getSelectedItem() == null) {
+                customerCityState.setDisable(true);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        try {
-            customerCountry.setItems(firstLevelDivisionDB.getCountries());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if(customerCountry.getSelectionModel().getSelectedItem() == null){
-            customerCityState.setDisable(true);
-        }
     }
-
 }

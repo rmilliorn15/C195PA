@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class firstLevelDivisionDB {
 
     /**
-     * scans DB and adds divisions with country code matching selected country to array
+     * Scans DB and adds divisions with country code matching selected country to array
      * populates as objects. need to convert to string to display correctly in combobox.
      * <p>
      * RUNTIME ERROR
@@ -44,7 +44,7 @@ public class firstLevelDivisionDB {
     }
 
     /**
-     * gets country name from database and adds to table used for combobox in customer screens.
+     * Gets country name from database and adds to table used for combobox in customer screens.
      *
      * @return list of countries.
      * @throws SQLException
@@ -62,13 +62,16 @@ public class firstLevelDivisionDB {
     }
 
     /**
-     * takes string and searches DB for match and returns country ID
+     * Takes string and searches DB for match and returns country ID
      * @param divisionName from selection box.
      * @return country ID number from DB
      * @throws SQLException
      */
     public static int getDivisionId(String divisionName) throws SQLException {
         int divisionId = 0;
+
+
+
         String sql = "SELECT * FROM FIRST_LEVEL_DIVISIONS WHERE Division = ?";
 
         PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);

@@ -17,7 +17,7 @@ public class loginToDB {
 
 
     /**
-     * gets input from login screen and compares to users. if username and password correct created new logged in user.
+     * Gets input from login screen and compares to users. if username and password correct created new logged in user.
      * @param userName input username
      * @param password input password
      * @return true if login successful else false
@@ -46,7 +46,7 @@ public class loginToDB {
     }
 
     /**
-     * gets default locale
+     * Gets default locale
      * @return user locale
      */
     public static Locale getUserLocale() {
@@ -54,7 +54,7 @@ public class loginToDB {
     }
 
     /**
-     * getter for user zone
+     * Getter for user zone
      * @return user zone id
      */
     public static ZoneId getUserZoneID() {
@@ -62,7 +62,7 @@ public class loginToDB {
     }
 
     /**
-     * getter for logged in user
+     * Getter for logged in user
      * @return logged in user.
      */
     public static User getLoggedInUser() {

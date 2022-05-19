@@ -35,7 +35,7 @@ public class UpdateCustomer implements Initializable {
     int Index;
 
     /**
-     * updates customer information and sends to database and main customer screen.
+     * Updates customer information and sends to database and main customer screen.
      * If succeccful returns to main screen.
      * @param actionEvent save button clicked.
      */
@@ -99,7 +99,7 @@ public class UpdateCustomer implements Initializable {
     }
 
     /**
-     * removes text from input boxes.
+     * Removes text from input boxes.
      * @param actionEvent clear button clicked.
      */
     public void clearBtnAction(ActionEvent actionEvent) {
@@ -111,7 +111,7 @@ public class UpdateCustomer implements Initializable {
     }
 
     /**
-     * cancels changes and returns to the main customer screen.
+     * Cancels changes and returns to the main customer screen.
      * @param actionEvent cancel button clicked.
      * @throws IOException .
      */
@@ -146,7 +146,7 @@ public class UpdateCustomer implements Initializable {
     }
 
     /**
-     * gets index from selected item for updating table view.
+     * Gets index from selected item for updating table view.
      * @param selectedIndex selected on main screen.
      */
     public void sendIndex(int selectedIndex) {
@@ -154,7 +154,7 @@ public class UpdateCustomer implements Initializable {
     }
 
     /**
-     * switch to hold alerts instead of cluttering code.
+     * Switch to hold alerts instead of cluttering code.
      * @param alertNumber int for error to display.
      */
     public void alertSwitch(int alertNumber){
@@ -194,7 +194,7 @@ public class UpdateCustomer implements Initializable {
     }
 
     /**
-     * populates the state province box when it is changed to new country.
+     * Populates the state province box when it is changed to new country.
      * @param actionEvent new country selected from combobox
      */
     public void countrySelect(ActionEvent actionEvent) {

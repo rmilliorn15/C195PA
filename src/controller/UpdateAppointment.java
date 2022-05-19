@@ -13,7 +13,6 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -35,7 +34,7 @@ public class UpdateAppointment implements Initializable {
 
 
     /**
-     * gets information from main appointment screen and sends to update screen
+     * Gets information from main appointment screen and sends to update screen
      *
      * @param send selecred from main screen
      * @throws SQLException
@@ -55,7 +54,7 @@ public class UpdateAppointment implements Initializable {
     }
 
     /**
-     * gets the index used for updating the table view.
+     * Gets the index used for updating the table view.
      *
      * @param selectedIndex index of selected item.
      */
@@ -64,7 +63,7 @@ public class UpdateAppointment implements Initializable {
     }
 
     /**
-     * saves changes to seleceted appointment and returns to main appointments if successful
+     * Saves changes to seleceted appointment and returns to main appointments if successful
      *
      * @param actionEvent save clicked
      * @throws SQLException
@@ -165,7 +164,7 @@ public class UpdateAppointment implements Initializable {
     }
 
     /**
-     * cancels changes and returns to main appointments screen
+     * Cancels changes and returns to main appointments screen
      * @param actionEvent cancel clicked
      * @throws IOException
      */
@@ -185,6 +184,7 @@ public class UpdateAppointment implements Initializable {
 
     /**
      *  Alert switch for appointments table
+     *  LAMBDA EXPRESSION auto changed by IDE
      * @param alertNumber alert assigned a number.
      */
     public void alertSwitch(int alertNumber){

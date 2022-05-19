@@ -15,12 +15,10 @@ public class CustomerDB {
 
 
     /**
-     * imports list of customers from DB and stores in array list
+     * Imports list of customers from DB and stores in array list
      *
      * join is so that division name and country name populate instead of numbers.
      *
-     * RUNTIME ERROR
-     * could not get country to populate on customer table. found out i did not have getter in the customer class to access the data.
      *
      * @return array list of customers
      */
@@ -57,9 +55,8 @@ public class CustomerDB {
     }
 
     /**
-     * creates new customer on the database.
-     * Made Void since it doesnt need to return anything except for when checking.
-     * <p>
+     * Creates new customer on the database.
+     * Made Void since it doesn't need to return anything except for when checking.
      * FOR THE ADD COMMAND
      *
      * @param customerName  input customer name
@@ -91,7 +88,7 @@ public class CustomerDB {
     }
 
     /**
-     * cannot be primative type.
+     * Cannot be primative type.
      * returns list of customer ID numbers.
      * @return list of customer ID.
      */
@@ -110,7 +107,7 @@ public class CustomerDB {
     }
 
     /**
-     * gets the next id from SQL database and uses it for auto gen id
+     * Gets the next id from SQL database and uses it for auto gen id
      * @return Customer ID
      * @throws SQLException
      */
@@ -128,7 +125,7 @@ public class CustomerDB {
 // get the last record that was inserted and create an object out of that instead  "SELECT max(Customer_ID) AS Max_Cust_ID FROM customers";
 
     /**
-     * deletes customer from dababase by selected ID number.
+     * Deletes customer from dababase by selected ID number.
      * @param customerID selected from table on main screen.
      * @throws SQLException
      */
@@ -140,15 +137,15 @@ public class CustomerDB {
     }
 
     /**
-     * gets selected customer and updates their info on Database
+     * Gets selected customer and updates their info on Database
      * RUNTIME ERROR
-     * Forgot to add the ps.executeUpdate and couldnt figure out why it wouldnt update.
+     * Forgot to add the ps.executeUpdate and couldn't figure out why it wouldn't update.
      * Also needs to have each item with = ? not at the end like with insert.
      * @param customerName name
      * @param address address
      * @param zipCode zip/postal code
      * @param phoneNumber phone number
-     * @param lastUpdate timestamo of update
+     * @param lastUpdate timestamp of update
      * @param lastUpdatedBy user who updated lase
      * @param divisionID division id number
      * @param customerId customer id to be changed.
@@ -169,7 +166,7 @@ public class CustomerDB {
     }
 
     /**
-     * should send command to reset the auto increment on the customers table.
+     * Should send command to reset the auto increment on the customers table.
      * @throws SQLException
      */
     public static void resetAutoIncrement() throws SQLException {

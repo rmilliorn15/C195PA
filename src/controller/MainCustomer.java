@@ -34,7 +34,7 @@ public class MainCustomer implements Initializable {
 
 
     /**
-     * opens add customer screen.
+     * Opens add customer screen.
      * @param actionEvent add button clicked
      *
      * @throws IOException .
@@ -48,7 +48,7 @@ public class MainCustomer implements Initializable {
     }
 
     /**
-     * gets selected customer and sends to update customer screen.
+     * Gets selected customer and sends to update customer screen.
      * @param actionEvent update button clicked.
      */
     public void updateBtnAction(ActionEvent actionEvent) {
@@ -79,7 +79,7 @@ public class MainCustomer implements Initializable {
     }
 
     /**
-     * deletes customer from Database and from the customer list array.
+     * Deletes customer from Database and from the customer list array.
      * also resets the auto increment if the highest id number is deleted. at least it should.
      * also checks appointment screen to see if any appointments are assigned to this customer before allowing delete.
      * @param actionEvent delete clicked.
@@ -121,7 +121,7 @@ public class MainCustomer implements Initializable {
     }
 
     /**
-     * exits program with code 0
+     * Exits program with code 0
      * @param actionEvent exit clicked.
      */
     public void backBtnAction(ActionEvent actionEvent) throws IOException {
@@ -136,7 +136,7 @@ public class MainCustomer implements Initializable {
     }
 
     /**
-     * allows search by name or ID and returns array of matching items.
+     * Allows search by name or ID and returns array of matching items.
      * @param actionEvent enter pressed while in search field.
      */
     public void searchCustomer(ActionEvent actionEvent) {
@@ -161,7 +161,7 @@ public class MainCustomer implements Initializable {
 
 
     /**
-     * swaps to appointments screen
+     * Swaps to appointments screen
      * @param actionEvent appointments button clicked
      *
      * @throws IOException .
@@ -175,7 +175,7 @@ public class MainCustomer implements Initializable {
     }
 
     /**
-     * loads screen and populates customer table from DB
+     * Loads screen and populates customer table from DB
      * @param url .
      * @param resourceBundle .
      */

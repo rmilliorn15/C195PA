@@ -12,14 +12,15 @@ import javafx.stage.Stage;
 import model.Appointment;
 import model.loginToDB;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -36,14 +37,14 @@ public class LoginScreenController implements Initializable {
     private boolean loginSuccessful = false;
 
     /**
-     * sets the users Locale
+     * Sets the users Locale
      * commented line is for testing setting to French.
      */
     private static Locale userLocale = Locale.getDefault();
     //  private Locale userLocale = Locale.FRENCH; //used to test french translation settings.
 
     /**
-     * sets userZone ID
+     * Sets userZone ID
      *
      */
     private static ZoneId userZoneID = ZoneId.systemDefault();
@@ -114,7 +115,7 @@ public class LoginScreenController implements Initializable {
     }
 
     /**
-     * holds the translated text areas for the login screem.
+     * Holds the translated text areas for the login screem.
      * Translations from google translate.
      * Sets the buttons and labels to French when called.
      */
@@ -128,7 +129,7 @@ public class LoginScreenController implements Initializable {
     }
 
     /**
-     * initallizes and sets text fields to correct language.
+     * Initallizes and sets text fields to correct language.
      * @param url
      * @param resourceBundle
      */

@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 public class ContactDB {
 
- /**
-     * gets contacts from Database.
+    /**
+     * Gets contacts from Database.
      * @return contact name
      * @throws SQLException
      */
@@ -46,7 +46,7 @@ public class ContactDB {
 
 
     /**
-     * gets contact id matching contact name
+     * Gets contact id matching contact name
      * @param contactName selected name
      * @return contact ID.
      * @throws SQLException

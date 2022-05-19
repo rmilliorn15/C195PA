@@ -17,7 +17,7 @@ public class ScreenSelector implements Initializable {
 
 
     /**
-     * opens to customer page
+     * Opens to customer page
      * @param actionEvent  Customer button clicked.
      * @throws IOException .
      */
@@ -30,7 +30,7 @@ public class ScreenSelector implements Initializable {
     }
 
     /**
-     * loads appointments page
+     * Loads appointments page
      * @param actionEvent appointment button clicked
      * @throws IOException .
      */
@@ -43,7 +43,7 @@ public class ScreenSelector implements Initializable {
     }
 
     /**
-     * exits the program with code 0
+     * Exits the program with code 0
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
@@ -51,6 +51,11 @@ public class ScreenSelector implements Initializable {
         System.exit(0);
     }
 
+    /**
+     * Opens the reports screen.
+     * @param actionEvent reports button clicked.
+     * @throws IOException
+     */
     public void reportsBtnAction(ActionEvent actionEvent) throws IOException {
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));

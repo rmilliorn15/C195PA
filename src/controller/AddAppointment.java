@@ -32,7 +32,7 @@ public class AddAppointment implements Initializable {
 
 
     /**
-     * loads screen and populates id field with highest number from DB
+     * Loads screen and populates id field with highest number from DB
      * @param url
      * @param resourceBundle
      */
@@ -50,7 +50,7 @@ public class AddAppointment implements Initializable {
     }
 
     /**
-     * creates new appointment and saves copy to Database.
+     * Creates new appointment and saves copy to Database.
      * @param actionEvent save button clicked.
      * @throws IOException
      * @throws SQLException
@@ -69,7 +69,7 @@ public class AddAppointment implements Initializable {
         String userName;
         int userID;
         int contactID;
-        String contactName = null;
+        String contactName;
         LocalDate selectedDate;
         LocalTime startTime;
         LocalTime endTime;
@@ -149,7 +149,7 @@ public class AddAppointment implements Initializable {
     }
 
     /**
-     * cancels add and returns to main screen.
+     * Cancels add and returns to main screen.
      * @param actionEvent cancel button clicked.
      * @throws IOException
      */
@@ -174,58 +174,61 @@ public class AddAppointment implements Initializable {
     public void alertSwitch(int alertNumber){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         switch (alertNumber) {
-            case 1:
+            case 1 -> {
                 alert.setTitle("Please Enter Title");
                 alert.setHeaderText("Please enter appointment title");
                 alert.show();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 alert.setTitle("Please Enter Description");
                 alert.setHeaderText("Please enter appointment description");
                 alert.show();
-                break;
-            case 3:
+            }
+            case 3 -> {
                 alert.setTitle("Please Enter Location");
                 alert.setHeaderText("Please enter appointment location");
                 alert.show();
-                break;
-            case 4:
+            }
+            case 4 -> {
                 alert.setTitle("Please Enter Type");
                 alert.setHeaderText("Please enter appointment type");
                 alert.show();
-                break;
-            case 5:
+            }
+            case 5 -> {
                 alert.setTitle("Please select appointment Start Date / Time");
                 alert.setHeaderText("Please select a date and time to start appointment");
                 alert.show();
-                break;
-            case 6:
+            }
+            case 6 -> {
                 alert.setTitle("Please select appointment End Date / Time");
                 alert.setHeaderText("Please select a date and time to End appointment");
                 alert.show();
-            case 7:
+            }
+            case 7 -> {
                 alert.setTitle("Please select a Contact");
                 alert.setHeaderText("Please select a contact for the appointment.");
                 alert.show();
-
-            case 8:
+            }
+            case 8 -> {
                 alert.setTitle("Number Format Exception");
                 alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
                 alert.show();
-                break;
-            case 9:
+            }
+            case 9 -> {
                 alert.setTitle("Invalid Start or end Time");
                 alert.setHeaderText("Please enter an End time that is after the Start time.");
                 alert.show();
-                break;
-            case 10:
+            }
+            case 10 -> {
                 alert.setTitle("Invalid Start or end Time");
                 alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
                 alert.show();
-            case 11:
+            }
+            case 11 -> {
                 alert.setTitle("Overlapping appointment");
                 alert.setHeaderText("Customer has overlapping appointments. Please Select different time.");
                 alert.show();
+            }
         }
     }
 }

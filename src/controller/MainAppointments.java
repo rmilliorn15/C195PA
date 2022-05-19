@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.Appointment;
 import model.AppointmentsDB;
@@ -39,7 +38,7 @@ public class MainAppointments implements Initializable {
     public TableColumn<Appointment, Integer> userIdColumn;
 
     /**
-     * opens add appointment page
+     * Opens add appointment page
      * @param actionEvent add button clicked
      */
     public void addBtnAction(ActionEvent actionEvent) throws IOException {
@@ -51,7 +50,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * opens update appointment page
+     * Opens update appointment page
      * @param actionEvent update button clicked.
      */
     public void updateBtnAction(ActionEvent actionEvent) throws SQLException {
@@ -81,7 +80,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * makes sure that an appointment is selected from the table and confirms before deleting the item.
+     * Makes sure that an appointment is selected from the table and confirms before deleting the item.
      * @param actionEvent delete button clicked.
      */
     public void deleteBtnAction(ActionEvent actionEvent) throws SQLException {
@@ -106,7 +105,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * returns to the selector screen
+     * Returns to the selector screen
      * @param actionEvent back button clicked
      * @throws IOException
      */
@@ -119,7 +118,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * removes search by day or week when selected
+     * Removes search by day or week when selected
      * @param actionEvent Default radio button chlicked.
      */
     public void defaultRadio(ActionEvent actionEvent) {
@@ -127,7 +126,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * filters by  appointments in the next month
+     * Filters by  appointments in the next month
      * @param actionEvent month radio button selected
      */
     public void monthRadio(ActionEvent actionEvent) {
@@ -135,15 +134,16 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * filters by appointments within the next week.
+     * Filters by appointments within the next week.
      * @param actionEvent week radio button selected.
      */
     public void weekRadio(ActionEvent actionEvent) {
+
         appointmentTableView.setItems(Appointment.getWeekAppointments());
     }
 
     /**
-     * swaps to customers screen without having to return to main screen.
+     * Swaps to customers screen without having to return to main screen.
      * @param actionEvent go to customer clicked.
      * @throws IOException .
      */
@@ -206,7 +206,7 @@ public class MainAppointments implements Initializable {
     }
 
     /**
-     * loads screen and populated appointment table.
+     * Loads screen and populated appointment table.
      * @param url
      * @param resourceBundle
      */

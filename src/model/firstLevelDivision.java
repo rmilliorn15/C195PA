@@ -11,7 +11,7 @@ public class firstLevelDivision {
     private static ObservableList<firstLevelDivision> getAllDivisions = FXCollections.observableArrayList();
 
     /**
-     * created new division object.
+     * Created new division object.
      *
      * @param divisionID   id from table
      * @param divisionName state/province name
@@ -24,7 +24,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * getter for selected item division ID
+     * Getter for selected item division ID
      *
      * @return division ID
      */
@@ -33,7 +33,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * getter for selected Division country ID
+     * Getter for selected Division country ID
      *
      * @return country ID
      */
@@ -42,7 +42,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * returns selected Division name
+     * Returns selected Division name
      *
      * @return division name
      */
@@ -51,7 +51,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * setter for Division ID
+     * Setter for Division ID
      *
      * @param divisionID .
      */
@@ -60,7 +60,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * setter for countryID
+     * Setter for countryID
      *
      * @param countryID .
      */
@@ -69,7 +69,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * setter for Division Name
+     * Setter for Division Name
      *
      * @param divisionName .
      */
@@ -78,7 +78,7 @@ public class firstLevelDivision {
     }
 
     /**
-     * returns first level divisions
+     * Returns first level divisions
      * @return first level divisions.
      */
     public static ObservableList<firstLevelDivision> getGetAllDivisions() {

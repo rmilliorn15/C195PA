@@ -23,12 +23,12 @@ public class Appointment {
     String contactName;
 
     /**
-     * holds the created appointments.
+     * Holds the created appointments.
      */
     private static ObservableList<Appointment> appointments = AppointmentsDB.getAllAppointments();
 
     /**
-     * creates new appointment object
+     * Creates new appointment object
      * @param appointmentID id
      * @param title title
      * @param description description
@@ -56,7 +56,7 @@ public class Appointment {
     }
 
     /**
-     * getter for appointment ID
+     * Getter for appointment ID
      * @return appointment ID
      */
     public int getAppointmentID() {
@@ -64,7 +64,7 @@ public class Appointment {
     }
 
     /**
-     * getter for contact id
+     * Getter for contact id
      * @return contact id
      */
     public int getContactID() {
@@ -72,7 +72,7 @@ public class Appointment {
     }
 
     /**
-     * gettter for customer id
+     * Getter for customer id
      * @return customer ID
      */
     public int getCustomerID() {
@@ -80,7 +80,7 @@ public class Appointment {
     }
 
     /**
-     * getter for user ID
+     * Getter for user ID
      * @return user id
      */
     public int getUserID() {
@@ -88,7 +88,7 @@ public class Appointment {
     }
 
     /**
-     * getter for contact name
+     * Getter for contact name
      * @return contact name
      */
     public String getContactName() {
@@ -96,7 +96,7 @@ public class Appointment {
     }
 
     /**
-     * getter for description
+     * Getter for description
      * @return description
      */
     public String getDescription() {
@@ -104,7 +104,7 @@ public class Appointment {
     }
 
     /**
-     * getter for location
+     * Getter for location
      * @return location
      */
     public String getLocation() {
@@ -112,7 +112,7 @@ public class Appointment {
     }
 
     /**
-     * getter for Title
+     * Getter for Title
      * @return title
      */
     public String getTitle() {
@@ -120,7 +120,7 @@ public class Appointment {
     }
 
     /**
-     * getter for type
+     * Getter for type
      * @return type
      */
     public String getType() {
@@ -128,7 +128,7 @@ public class Appointment {
     }
 
     /**
-     * gertter for start time
+     * Getter for start time
      *
      * @return start time
      */
@@ -140,7 +140,7 @@ public class Appointment {
     }
 
     /**
-     * getter for end time
+     * Getter for end time
      *
      * @return end time
      */
@@ -152,7 +152,7 @@ public class Appointment {
     }
 
     /**
-     * adds new appointment to appointment array.
+     * Adds new appointment to appointment array.
      * @param newAppointment new appointment created.
      */
     public static void addAppointment(Appointment newAppointment){
@@ -160,7 +160,7 @@ public class Appointment {
     }
 
     /**
-     * removes the appointment from array.
+     * Removes the appointment from array.
      * @param selectedAppointment selected on appointment screen.
      */
     public static void removeAppointment(Appointment selectedAppointment){
@@ -168,7 +168,7 @@ public class Appointment {
     }
 
     /**
-     * updates existing appointment in array
+     * Updates existing appointment in array
      * @param Index from selected appointment
      * @param appointment changes made.
      */
@@ -177,7 +177,7 @@ public class Appointment {
     }
 
     /**
-     * appointment array list.
+     * Appointment array list.
      * @return list of all appointments
      */
     public static ObservableList<Appointment> getAllAppointments() {
@@ -185,7 +185,7 @@ public class Appointment {
     }
 
     /**
-     * checks business hours and makes sure appointment is during those hours
+     * Checks business hours and makes sure appointment is during those hours
      * @param apptTime appointment time when adding/ changing appointment
      * @return
      */
@@ -201,14 +201,17 @@ public class Appointment {
     }
 
     /**
-     * returns appointments within the next week
+     * Returns appointments within the next week
      * @return  array of appointments in the next week
      */
     public static ObservableList<Appointment> getWeekAppointments() {
 
+
         LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
         LocalDateTime endTime = beginTime.plusWeeks(1);
         ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
+
+
         for (Appointment searchAppt : appointments) {
             LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
 
@@ -216,13 +219,12 @@ public class Appointment {
                 weeklyAppointments.add(searchAppt);
             }
         }
-
-
         return weeklyAppointments;
     }
 
     /**
-     * returns an array of appointments in the next month
+     * LAMBDA EXPRESSION: iterates through appointments and compares time to filter by month.
+     * Returns an array of appointments in the next month
      * @return array of appointments in the next month
      */
     public static ObservableList<Appointment> getMonthAppointments() {
@@ -230,20 +232,19 @@ public class Appointment {
 
         LocalDateTime beginTime = LocalDateTime.now(loginToDB.getUserZoneID());
         LocalDateTime endTime = beginTime.plusMonths(1);
-        for (Appointment searchAppt : appointments) {
-            LocalDateTime searchTime = searchAppt.getStartTime().toLocalDateTime();
 
-            if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)) {
-                monthlyAppointments.add(searchAppt);
-            }
-        }
+        appointments.forEach(appointment -> {
+                LocalDateTime searchTime = appointment.getStartTime().toLocalDateTime();
 
-
+                if (searchTime.isAfter(beginTime) && searchTime.isBefore(endTime)) {
+                    monthlyAppointments.add(appointment);
+                }
+            });
         return monthlyAppointments;
     }
 
     /**
-     * checks appointments for any in the next 15 minutes.
+     * Checks appointments for any in the next 15 minutes.
      * @return appointments in the next 15 minutes.
      */
     public static ObservableList<Appointment> upcomingAppointment(){
@@ -265,7 +266,7 @@ public class Appointment {
     }
 
     /**
-     * shows alert for the upcoming appointment when logged in.
+     * Shows alert for the upcoming appointment when logged in.
      */
     public static void nextAppt(){
         if( Appointment.upcomingAppointment() != null){
@@ -288,7 +289,7 @@ public class Appointment {
     }
 
     /**
-     * checks for appointment overlap
+     * Checks for appointment overlap
      * @param custID customer id
      * @param newDate new appointment date
      * @param newStart new start time
@@ -305,20 +306,20 @@ public class Appointment {
         for (int i = 0;i < custAppts.size(); i++) {
             Appointment appt = custAppts.get(i);
             startDate = appt.getStartTime().toLocalDateTime().toLocalDate();
-           if( custID == appt.getAppointmentID()){
-               return false;
-           }
-                if (startDate.equals(newDate)) {
-                    apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
-                    apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
-                    if ((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)) {
-                        overlap = true;
-                    } else if (newEnd.isAfter(apptStime) && (newStart.isBefore(apptEtime) || newEnd.equals(apptEtime))) {
-                        overlap = true;
-                    } else if ((newStart.isBefore(apptStime) || newStart.equals(apptStime)) && (newEnd.isAfter(apptEtime) || newEnd.equals(apptEtime))) {
-                        overlap = true;
-                    }
+            if( custID == appt.getAppointmentID()){
+                return false;
+            }
+            if (startDate.equals(newDate)) {
+                apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
+                apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
+                if ((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)) {
+                    overlap = true;
+                } else if (newEnd.isAfter(apptStime) && (newStart.isBefore(apptEtime) || newEnd.equals(apptEtime))) {
+                    overlap = true;
+                } else if ((newStart.isBefore(apptStime) || newStart.equals(apptStime)) && (newEnd.isAfter(apptEtime) || newEnd.equals(apptEtime))) {
+                    overlap = true;
                 }
+            }
 
         }
         return overlap;
