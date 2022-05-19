@@ -47,7 +47,6 @@ public class ScreenSelector implements Initializable {
      * @param actionEvent exi clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        System.out.println(" Need customer report and report for by type and date \n Lambda expressions. \n JavaDocs & README and then submit. ");
         System.exit(0);
     }
 
