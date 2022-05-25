@@ -18,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * @author Richard Milliorn
+ */
 public class AddAppointment implements Initializable {
     public TextField appointmentID;
     public TextField addTitle;
@@ -29,6 +32,7 @@ public class AddAppointment implements Initializable {
     public TextField addStart;
     public TextField addEnd;
     public TextField addCust;
+    public TextField userIdText;
 
 
     /**
@@ -73,8 +77,8 @@ public class AddAppointment implements Initializable {
         LocalDate selectedDate;
         LocalTime startTime;
         LocalTime endTime;
-        ZonedDateTime zonedStart;
-        ZonedDateTime zonedEnd;
+      //  ZonedDateTime zonedStart;
+      //  ZonedDateTime zonedEnd;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
         id = Integer.parseInt(appointmentID.getText());
@@ -87,11 +91,11 @@ public class AddAppointment implements Initializable {
         endTime = LocalTime.parse(addEnd.getText(), formatter);
         startDateTime = LocalDateTime.of(selectedDate, startTime);
         endDateTime = LocalDateTime.of(selectedDate, endTime);
-        zonedStart = ZonedDateTime.of(startDateTime, loginToDB.getUserZoneID());
-        zonedEnd = ZonedDateTime.of(endDateTime, loginToDB.getUserZoneID());
+       // zonedStart = ZonedDateTime.of(startDateTime, ZoneId.systemDefault());
+     //   zonedEnd = ZonedDateTime.of(endDateTime, ZoneId.systemDefault());
         customerID = Integer.parseInt(addCust.getText());
-        userName = User.getUserName();
-        userID = User.getUserId();
+        userID = Integer.parseInt(userIdText.getText());
+        userName = UserDB.getUserName(userID);
         contactName = String.valueOf(addContact.getValue());
         contactID = ContactDB.getContactId(contactName);
 
@@ -110,21 +114,26 @@ public class AddAppointment implements Initializable {
             alertSwitch(6);
         } else if (contactName.isBlank()) {
             alertSwitch(7);
+        } else if (customerID > CustomerDB.getMaxID()) {
+            alertSwitch(12);
+        } else if (userName.equals("Default")) {
+            alertSwitch(13);
+
         } else {
 
             if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
                 if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
-                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
+                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime, id)){
                         alertSwitch( 11);
                     }
                     else {
 
 
                         // converts to UTC to store in DB
-                        zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
-                        zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
-                        startDateTime = zonedStart.toLocalDateTime();
-                        endDateTime = zonedEnd.toLocalDateTime();
+             //           zonedStart = zonedStart.withZoneSameInstant(ZoneOffset.UTC);
+                //        zonedEnd = zonedEnd.withZoneSameInstant(ZoneOffset.UTC);
+                //        startDateTime = zonedStart.toLocalDateTime();
+                 //       endDateTime = zonedEnd.toLocalDateTime();
 
 
                         Appointment newAppt = new Appointment(id, title, description, location, type, startDateTime, endDateTime, customerID, userID, contactID, contactName);
@@ -227,6 +236,16 @@ public class AddAppointment implements Initializable {
             case 11 -> {
                 alert.setTitle("Overlapping appointment");
                 alert.setHeaderText("Customer has overlapping appointments. Please Select different time.");
+                alert.show();
+            }
+            case 12 -> {
+                alert.setTitle("Customer Not Found.");
+                alert.setHeaderText("Please enter Valid Customer ID Number");
+                alert.show();
+            }
+            case 13 -> {
+                alert.setTitle("User Not Found.");
+                alert.setHeaderText("Please enter Valid User ID Number");
                 alert.show();
             }
         }

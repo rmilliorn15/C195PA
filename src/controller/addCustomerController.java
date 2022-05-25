@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
 public class addCustomerController implements Initializable {
 
     public TextField customerName;
@@ -145,8 +146,9 @@ public class addCustomerController implements Initializable {
     }
 
     /**
-     * Switch used for my alerts on the customer table.
      * LAMBDA EXPRESSION: takes int and returns appropriate alert text.
+     * Switch used for my alerts on the customer table.
+     *
      * @param alertNumber int indicating which error
      */
     public void alertSwitch(int alertNumber){

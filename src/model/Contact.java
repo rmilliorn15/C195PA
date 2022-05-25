@@ -1,5 +1,6 @@
 package model;
 
+/** * @author Richard Milliorn */
 public class Contact {
 
     private static int contactID;

@@ -37,5 +37,7 @@
       <Label layoutX="305.0" layoutY="260.0" text="End Time" />
       <TextField fx:id="addCust" layoutX="380.0" layoutY="77.0" />
       <Label layoutX="305.0" layoutY="81.0" text="Customer ID" />
+      <Label layoutX="20.0" layoutY="300.0" text="User ID" />
+      <TextField fx:id="userIdText" layoutX="91.0" layoutY="296.0" />
    </children>
 </AnchorPane>

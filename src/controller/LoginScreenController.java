@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
 public class LoginScreenController implements Initializable {
     public Label mainLoginLabel;
     public Label userNameLabel;
@@ -55,7 +56,7 @@ public class LoginScreenController implements Initializable {
      * @param actionEvent exit button clicked
      */
     public void exitBtnAction(ActionEvent actionEvent) {
-        if (userLocale.getCountry().equals("FR")) {
+        if (userLocale.getLanguage().equals("fr")) {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setTitle("Êtes-vous sûr de vouloir quitter?");
             confirm.setHeaderText("Cliquez sur OK pour quitter");
@@ -87,31 +88,37 @@ public class LoginScreenController implements Initializable {
     public void loginBtnAction(ActionEvent actionEvent) throws IOException, SQLException {
         String userName = userNameField.getText();//gets input username
         String password = passwordField.getText();//gets input password
-        loginSuccessful = loginToDB.loggedIn(userName,password);
+        loginSuccessful = loginToDB.loggedIn(userName, password);
         String fileName = "login_activity.txt";
-        ZonedDateTime zonedNow = ZonedDateTime.now(loginToDB.getUserZoneID());
+        ZonedDateTime zonedNow = ZonedDateTime.now(ZoneId.systemDefault());
         zonedNow = zonedNow.withZoneSameInstant(ZoneOffset.UTC);
         LocalDateTime now = zonedNow.toLocalDateTime();
 
-        FileWriter fWriter = new FileWriter( fileName, true);
+        FileWriter fWriter = new FileWriter(fileName, true);
         PrintWriter outputFile = new PrintWriter(fWriter);
 
 
-        if(loginSuccessful) {
+        if (loginSuccessful) {
             Parent root = FXMLLoader.load(getClass().getResource("/view/screenSelector.fxml"));
             Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             stage.setTitle("View");
             stage.setScene(new Scene(root));
             stage.show();
             Appointment.nextAppt();
-            outputFile.println(userName+ " Login Successful  at " + now +  "UTC");
+            outputFile.println(userName + " Login Successful  at " + now + "UTC");
+        } else {
+            if (userLocale.getLanguage().equals("fr")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Nom d'utilisateur ou mot de passe invalide");
+                alert.showAndWait();
+
+                outputFile.println(userName + " Login unsuccessful  at " + now + "UTC");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid User Name or Password.");
+                alert.showAndWait();
+                outputFile.println(userName + " Login unsuccessful  at " + now + "UTC");
+            }
+            outputFile.close();
         }
-        else {
-            Alert alert = new Alert(Alert.AlertType.ERROR,"Invalid User Name or Password.");
-            alert.showAndWait();
-            outputFile.println(userName + " Login unsuccessful  at " + now +  "UTC");
-        }
-        outputFile.close();
     }
 
     /**

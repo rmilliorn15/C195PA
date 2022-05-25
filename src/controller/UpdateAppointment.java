@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
+
 public class UpdateAppointment implements Initializable {
     public TextField appointmentID;
     public TextField addTitle;
@@ -29,6 +31,7 @@ public class UpdateAppointment implements Initializable {
     public TextField addStart;
     public TextField addEnd;
     public TextField addCust;
+    public TextField userIdText;
 
     int index;
 
@@ -51,6 +54,7 @@ public class UpdateAppointment implements Initializable {
         addStart.setText(String.valueOf(send.getStartTime().toLocalDateTime().toLocalTime()));
         addCust.setText(String.valueOf(send.getCustomerID()));
         dateSelect.setValue(send.getStartTime().toLocalDateTime().toLocalDate());
+        userIdText.setText(String.valueOf(send.getUserID()));
     }
 
     /**
@@ -104,8 +108,8 @@ public class UpdateAppointment implements Initializable {
         zonedStart = ZonedDateTime.of(startDateTime, loginToDB.getUserZoneID());
         zonedEnd = ZonedDateTime.of(endDateTime, loginToDB.getUserZoneID());
         customerID = Integer.parseInt(addCust.getText());
-        userName = User.getUserName();
-        userID = User.getUserId();
+        userID = Integer.parseInt(userIdText.getText());
+        userName = UserDB.getUserName(userID);
         contactName = String.valueOf(addContact.getValue());
         contactID = ContactDB.getContactId(contactName);
 
@@ -124,11 +128,18 @@ public class UpdateAppointment implements Initializable {
             alertSwitch(6);
         } else if (contactName.isBlank()) {
             alertSwitch(7);
-        } else {
+        } else if (customerID > CustomerDB.getMaxID()) {
+            alertSwitch(12);
+        } else if (userName.equals("Default")) {
+            alertSwitch(13);
+
+        }
+        else{
+
 
             if (Appointment.checkBusinessHours(startDateTime) && Appointment.checkBusinessHours(endDateTime)) {
                 if (startDateTime.toLocalTime().isBefore(endDateTime.toLocalTime())) {
-                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime)){
+                    if( Appointment.checkOverlap(customerID, selectedDate, startTime,endTime, id)){
                         alertSwitch( 11);
                     }
                     else {
@@ -190,59 +201,74 @@ public class UpdateAppointment implements Initializable {
     public void alertSwitch(int alertNumber){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         switch (alertNumber) {
-            case 1:
+            case 1 -> {
                 alert.setTitle("Please Enter Title");
                 alert.setHeaderText("Please enter appointment title");
                 alert.show();
-                break;
-            case 2:
+            }
+            case 2 -> {
                 alert.setTitle("Please Enter Description");
                 alert.setHeaderText("Please enter appointment description");
                 alert.show();
-                break;
-            case 3:
+            }
+            case 3 -> {
                 alert.setTitle("Please Enter Location");
                 alert.setHeaderText("Please enter appointment location");
                 alert.show();
-                break;
-            case 4:
+            }
+            case 4 -> {
                 alert.setTitle("Please Enter Type");
                 alert.setHeaderText("Please enter appointment type");
                 alert.show();
-                break;
-            case 5:
+            }
+            case 5 -> {
                 alert.setTitle("Please select appointment Start Date / Time");
                 alert.setHeaderText("Please select a date and time to start appointment");
                 alert.show();
-                break;
-            case 6:
+            }
+            case 6 -> {
                 alert.setTitle("Please select appointment End Date / Time");
                 alert.setHeaderText("Please select a date and time to End appointment");
                 alert.show();
-            case 7:
+            }
+            case 7 -> {
                 alert.setTitle("Please select a Contact");
                 alert.setHeaderText("Please select a contact for the appointment.");
                 alert.show();
-
-            case 8:
+            }
+            case 8 -> {
                 alert.setTitle("Number Format Exception");
                 alert.setHeaderText("Issue converting string to numbers. Please check if added and try again.");
                 alert.show();
-                break;
-            case 9:
+            }
+            case 9 -> {
                 alert.setTitle("Invalid Start or end Time");
                 alert.setHeaderText("Please enter an End time that is after the Start time.");
                 alert.show();
-                break;
-            case 10:
+            }
+            case 10 -> {
                 alert.setTitle("Invalid Start or end Time");
                 alert.setHeaderText("Please enter Start and End time between 8am and 10pm EST.");
                 alert.show();
-            case 11:
+            }
+            case 11 -> {
                 alert.setTitle("Overlapping appointment");
                 alert.setHeaderText("Customer has overlapping appointments. Please Select different time.");
                 alert.show();
+            }
+            case 12 -> {
+                alert.setTitle("Customer Not Found.");
+                alert.setHeaderText("Please enter Valid Customer ID Number");
+                alert.show();
+            }
+            case 13 -> {
+                alert.setTitle("User Not Found.");
+                alert.setHeaderText("Please enter Valid User ID Number");
+                alert.show();
+            }
+
         }
+
     }
 
     @Override

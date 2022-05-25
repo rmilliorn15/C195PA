@@ -42,5 +42,6 @@
       <RadioButton layoutX="396.0" layoutY="19.0" mnemonicParsing="false" onAction="#monthRadio" text="Month" toggleGroup="$viewAppointment" />
       <RadioButton layoutX="493.0" layoutY="19.0" mnemonicParsing="false" onAction="#weekRadio" text="Week" toggleGroup="$viewAppointment" />
       <Button layoutX="53.0" layoutY="498.0" mnemonicParsing="false" onAction="#customerBtnAction" prefHeight="32.0" prefWidth="137.0" text="Go To Customers" />
+      <Label fx:id="userLocale" layoutX="351.0" layoutY="494.0" text="Label" />
    </children>
 </AnchorPane>

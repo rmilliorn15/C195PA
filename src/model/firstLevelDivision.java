@@ -3,6 +3,7 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/** * @author Richard Milliorn */
 public class firstLevelDivision {
     private int divisionID;
     private static String divisionName;

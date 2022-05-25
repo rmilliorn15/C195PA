@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 
+/** * @author Richard Milliorn */
 public class loginToDB {
 
     private static User loggedInUser;

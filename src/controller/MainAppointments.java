@@ -23,6 +23,9 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * @author Richard Milliorn
+ */
 public class MainAppointments implements Initializable {
     public TableView<Appointment> appointmentTableView;
     public TableColumn<Appointment, Integer> idColumn;
@@ -36,6 +39,7 @@ public class MainAppointments implements Initializable {
     public TableColumn<Appointment, Integer> customerIdColumn;
     public ToggleGroup viewAppointment;
     public TableColumn<Appointment, Integer> userIdColumn;
+    public Label userLocale;
 
     /**
      * Opens add appointment page
@@ -93,7 +97,7 @@ public class MainAppointments implements Initializable {
         } else {
             Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
             confirm.setHeaderText("Delete Appointment?");
-            confirm.setContentText("Are you sure you want to delete Appointment " + deleteAppointment.getAppointmentID() + deleteAppointment.getType() + " Proceed?");
+            confirm.setContentText("Are you sure you want to delete Appointment " + deleteAppointment.getAppointmentID() + " " +  deleteAppointment.getType() + " Proceed?");
             Optional<ButtonType> result = confirm.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 int deleteAppointmentId = deleteAppointment.getAppointmentID();
@@ -223,6 +227,7 @@ public class MainAppointments implements Initializable {
         startColumn.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         endColumn.setCellValueFactory(new PropertyValueFactory<>("endTime"));
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        userLocale.setText(String.valueOf(loginToDB.getUserZoneID()));
 
     }
 

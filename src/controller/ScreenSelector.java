@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
 public class ScreenSelector implements Initializable {
 
 

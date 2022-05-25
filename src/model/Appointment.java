@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.*;
 
+/**
+ *  @author Richard Milliorn
+ *  */
 public class Appointment {
 
     int appointmentID;
@@ -133,10 +136,10 @@ public class Appointment {
      * @return start time
      */
     public Timestamp getStartTime() {
-        ZonedDateTime zonedDateTime = startTime.atZone(ZoneOffset.UTC);
-        zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of(String.valueOf(loginToDB.getUserZoneID())));
-        LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
-        return Timestamp.valueOf(zonedStartTime);
+      //  ZonedDateTime zonedDateTime = startTime.atZone();
+      //  zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.systemDefault());
+       // LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
+        return Timestamp.valueOf(startTime);
     }
 
     /**
@@ -145,10 +148,10 @@ public class Appointment {
      * @return end time
      */
     public Timestamp getEndTime() {
-        ZonedDateTime zonedDateTime = endTime.atZone(ZoneOffset.UTC);
-        zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of(String.valueOf(loginToDB.getUserZoneID())));
-        LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
-        return Timestamp.valueOf(zonedStartTime);
+      //  ZonedDateTime zonedDateTime = endTime.atZone(ZoneOffset.UTC);
+     //   zonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of(String.valueOf(loginToDB.getUserZoneID())));
+      //  LocalDateTime zonedStartTime = zonedDateTime.toLocalDateTime();
+        return Timestamp.valueOf(endTime);
     }
 
     /**
@@ -297,7 +300,7 @@ public class Appointment {
      * @return true if appointment overlap.
      * @throws SQLException
      */
-    public static boolean checkOverlap(int custID, LocalDate newDate, LocalTime newStart, LocalTime newEnd) throws SQLException {
+    public static boolean checkOverlap(int custID, LocalDate newDate, LocalTime newStart, LocalTime newEnd, int apptID) throws SQLException {
         ObservableList<Appointment> custAppts = AppointmentsDB.getApptByID(custID);
         boolean overlap = false;
         LocalDate startDate;
@@ -306,10 +309,9 @@ public class Appointment {
         for (int i = 0;i < custAppts.size(); i++) {
             Appointment appt = custAppts.get(i);
             startDate = appt.getStartTime().toLocalDateTime().toLocalDate();
-            if( custID == appt.getAppointmentID()){
+            if( apptID == appt.getAppointmentID()){
                 return false;
-            }
-            if (startDate.equals(newDate)) {
+            } else if (startDate.equals(newDate)) {
                 apptStime = appt.getStartTime().toLocalDateTime().toLocalTime();
                 apptEtime = appt.getEndTime().toLocalDateTime().toLocalTime();
                 if ((newStart.isAfter(apptStime) || newStart.equals(apptStime)) && newStart.isBefore(apptEtime)) {

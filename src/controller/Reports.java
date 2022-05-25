@@ -17,6 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
 public class Reports implements Initializable {
     public TableView appointmentTableView;
     public TableColumn idColumn;

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import java.time.LocalDateTime;
 
 
+/** * @author Richard Milliorn */
 public class Customer {
 
     private int id;

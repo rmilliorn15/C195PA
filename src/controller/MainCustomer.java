@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** * @author Richard Milliorn */
 public class MainCustomer implements Initializable {
     public TableView<Customer> customerTable;
     public TableColumn<Customer, Integer> customerIdColumn;

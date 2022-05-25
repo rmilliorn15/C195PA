@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/** * @author Richard Milliorn */
 public class UserDB {
 
 
@@ -34,4 +35,27 @@ public class UserDB {
         }
         return userList;
     }
+
+    public static String getUserName(int userID) {
+        String userName = "Default";
+        try{
+            String sql = "SELECT * FROM USERS WHERE USER_ID = ?";
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setInt(1,userID);
+
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+
+                userName = resultSet.getString("User_Name");
+
+
+            }
+
+        }  catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return userName;
+    }
+
 }
+

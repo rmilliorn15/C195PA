@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/** * @author Richard Milliorn */
 public class AppointmentsDB {
 
     /**

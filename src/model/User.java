@@ -1,6 +1,7 @@
 package model;
 
 
+/** * @author Richard Milliorn */
 public class User {
 
     private static String userName;
